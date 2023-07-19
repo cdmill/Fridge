@@ -12,7 +12,8 @@ class StackWindow: NSObject, NSApplicationDelegate {
     
     private var statusItem: NSStatusItem!
     private var menu: NSMenu!
-    private var urls: [URL] = []
+    private var index = 0
+    private var urls: [String: URL] = [:]
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -60,13 +61,27 @@ class StackWindow: NSObject, NSApplicationDelegate {
                 
         let filePath = url.absoluteString
         if let match = filePath.firstMatch(of: /[^\/]+\.pdf$/) {
-            let fileName = NSMenuItem(title: String(match.output), action: #selector(openFile), keyEquivalent: "1")
-            menu.insertItem(fileName, at: 0)
+            let fileName = String(match.output)
+            
+            if urls.keys.contains(fileName) {
+                return
+            }
+            
+            let file = NSMenuItem(title: fileName, action: #selector(openFile(_:)), keyEquivalent: String(index+1))
+            menu.insertItem(file, at: index)
+            urls[file.title] = url
+            index += 1
         }
-        urls.append(url)
+        
+        //        if urls.count == 4 {
+        //            menu.items[menu.items.count-1].isHidden = true
+        //        }
     }
     
-    @objc func openFile() {
-        NSWorkspace.shared.open(urls[0])
+    @objc func openFile(_ sender: NSMenuItem) {
+        guard let url = urls[sender.title] else {
+            return
+        }
+        NSWorkspace.shared.open(url)
     }
 }
