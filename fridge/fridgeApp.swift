@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@main
 struct fridgeApp: App {
     var body: some Scene {
         WindowGroup {
