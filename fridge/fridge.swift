@@ -30,14 +30,14 @@ class StackWindow: NSObject, NSApplicationDelegate {
     func setup() {
         let menu = NSMenu()
         
-        let addFileOption =  NSMenuItem(title: "Add File to Stack", action: #selector(addFileToStack), keyEquivalent: "a")
+        let addFileOption =  NSMenuItem(title: "Add File", action: #selector(addFileToStack), keyEquivalent: "a")
         menu.addItem(addFileOption)
         statusItem.menu = menu
     }
     
     @objc func addFileToStack() {
         let dialog = NSOpenPanel()
-        dialog.title = "Choose a File to Add to Stack"
+        dialog.title = "Choose a File to Add"
         dialog.canChooseFiles = true
         dialog.canChooseDirectories = false
         dialog.allowsMultipleSelection = false
