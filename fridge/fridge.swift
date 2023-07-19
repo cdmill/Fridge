@@ -13,7 +13,8 @@ class StackWindow: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var menu: NSMenu!
     private var index = 0
-    private var urls: [String: URL] = [:]
+    private var urls: [String: String] = [:]
+    private let defaults = UserDefaults.standard
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -34,6 +35,15 @@ class StackWindow: NSObject, NSApplicationDelegate {
         let addFileOption =  NSMenuItem(title: "Add File", action: #selector(addFileToStack), keyEquivalent: "a")
         menu.addItem(addFileOption)
         statusItem.menu = menu
+        let storedFiles = defaults.dictionary(forKey: "files") as? [String: String] ?? [:]
+        if !storedFiles.isEmpty {
+            for (key, value) in storedFiles {
+                let file = NSMenuItem(title: key, action: #selector(openFile(_:)), keyEquivalent: String(index+1))
+                menu.insertItem(file, at: index)
+                urls[file.title] = value
+                index += 1
+            }
+        }
     }
     
     @objc func addFileToStack() {
@@ -54,11 +64,10 @@ class StackWindow: NSObject, NSApplicationDelegate {
             return
         }
         
-        guard let url = fileChoice else {
-            // Something went wrong
+        guard let url = fileChoice else { // Something went wrong
             return
         }
-                
+        
         let filePath = url.absoluteString
         if let match = filePath.firstMatch(of: /[^\/]+\.pdf$/) {
             let fileName = String(match.output)
@@ -69,8 +78,9 @@ class StackWindow: NSObject, NSApplicationDelegate {
             
             let file = NSMenuItem(title: fileName, action: #selector(openFile(_:)), keyEquivalent: String(index+1))
             menu.insertItem(file, at: index)
-            urls[file.title] = url
+            urls[file.title] = filePath
             index += 1
+            defaults.set(urls, forKey: "files")
         }
         
         //        if urls.count == 4 {
@@ -79,9 +89,9 @@ class StackWindow: NSObject, NSApplicationDelegate {
     }
     
     @objc func openFile(_ sender: NSMenuItem) {
-        guard let url = urls[sender.title] else {
-            return
+        guard let filePath = urls[sender.title] else { return }
+        if let url = URL(string: filePath) {
+            NSWorkspace.shared.open(url)
         }
-        NSWorkspace.shared.open(url)
     }
 }
