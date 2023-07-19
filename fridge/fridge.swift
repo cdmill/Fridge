@@ -16,8 +16,12 @@ class StackWindow: NSObject, NSApplicationDelegate {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem.button {
             if #available(macOS 11.0, *) {
-                button.image = NSImage(systemSymbolName: "1.circle", accessibilityDescription: "1")
-            } else {
+                let icon = NSImage(systemSymbolName: "refrigerator.fill", accessibilityDescription: "fridge")
+                var config = NSImage.SymbolConfiguration(pointSize: 13, weight: .black)
+                button.image = icon?.withSymbolConfiguration(config)
+            }
+            else {
+                // previous macOS versions not supported
             }
         }
         setup()
@@ -26,8 +30,8 @@ class StackWindow: NSObject, NSApplicationDelegate {
     func setup() {
         let menu = NSMenu()
         
-        let one =  NSMenuItem(title: "Add File to Stack", action: #selector(addFileToStack), keyEquivalent: "a")
-        menu.addItem(one)
+        let addFileOption =  NSMenuItem(title: "Add File to Stack", action: #selector(addFileToStack), keyEquivalent: "a")
+        menu.addItem(addFileOption)
         statusItem.menu = menu
     }
     
