@@ -59,8 +59,10 @@ class StackWindow: NSObject, NSApplicationDelegate {
         }
                 
         let urlString = url.absoluteString
-        let filePath = NSMenuItem(title: urlString, action: #selector(openFile), keyEquivalent: "1")
-        menu.addItem(filePath)
+        if let match = urlString.firstMatch(of: /[^\/]+\.pdf$/) {
+            let filePath = NSMenuItem(title: String(match.output), action: #selector(openFile), keyEquivalent: "1")
+            menu.addItem(filePath)
+        }
         urls.append(url)
     }
     
