@@ -11,8 +11,27 @@ import SwiftUI
 extension fridgeMenu {
     @MainActor class fridge: ObservableObject {
         
-        @Published var urls: [String: String] = [:]
-        private let defaults = UserDefaults.standard
+        @Published var items: [fridgeItem] = []
+        private var files: Set<String> = []
+        private var index = 0
+        
+        struct fridgeItem: Codable {
+            let url: URL
+            let filename: String
+        }
+        
+        init() {
+            
+            if let data = UserDefaults.standard.data(forKey: "StoredFiles") {
+                do {
+                    items = try JSONDecoder().decode([fridgeItem].self, from: data)
+                } catch {
+                   print("Unable to decode data.")
+                }
+            }
+            
+            index = items.count
+        }
         
         func addFile() {
             let dialog = NSOpenPanel()
@@ -40,22 +59,26 @@ extension fridgeMenu {
             if let match = filePath.firstMatch(of: /[^\/]+\.pdf$/) {
                 let fileName = String(match.output)
                 
-                if urls.keys.contains(fileName) {
+                if files.contains(fileName) {
                     return
                 }
                 
-                urls[fileName] = filePath
-                defaults.set(urls, forKey: "files")
+                items.append(fridgeItem(url: url, filename: fileName))
+                files.insert(fileName)
+                if let encoded = try? JSONEncoder().encode(items) {
+                    UserDefaults.standard.set(encoded, forKey: "StoredFiles")
+                }
+                index += 1
             }
         }
         
-        func removeFile() {}
+        func removeFile() {
+            
+        }
         
-        func openFile(_ sender: NSMenuItem) {
-            guard let filePath = urls[sender.title] else { return }
-            if let url = URL(string: filePath) {
-                NSWorkspace.shared.open(url)
-            }
+        func openFile(_ i: Int) {
+            let url = items[i].url
+            NSWorkspace.shared.open(url)
         }
     }
 }

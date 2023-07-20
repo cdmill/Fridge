@@ -24,13 +24,19 @@ struct fridgeApp: App {
 
 struct fridgeMenu: View {
     @StateObject private var fridgeModel = fridge()
-    private let defaults = UserDefaults.standard
     
     var body: some View {
+        VStack{
+            ForEach(0...fridgeModel.items.count-1, id: \.self) { i in
+                if !fridgeModel.items.isEmpty {
+                    Button{fridgeModel.openFile(i)} label: {Text(fridgeModel.items[i].filename)}
+                }
+            }
+        }
         Divider()
-        Button(action: fridgeModel.addFile, label: {Text("Add File")} )
+        Button{fridgeModel.addFile()} label: {Image(systemName: "plus.circle")}
         Button(action: fridgeModel.removeFile, label: {Text("RemoveFile")} )
         Divider()
-        Button("Quit") { NSApplication.shared.terminate(nil) }.keyboardShortcut("q")
+        Button("Quit") { NSApplication.shared.terminate(nil) }
     }
 }
