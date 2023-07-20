@@ -8,8 +8,9 @@
 import Foundation
 import SwiftUI
 
+//@main
 let app = NSApplication.shared
-let delegate = StackWindow()
+let delegate = FridgeWindow()
 app.delegate = delegate
 
 _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)

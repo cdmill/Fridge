@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class StackWindow: NSObject, NSApplicationDelegate {
+class FridgeWindow: NSObject, NSApplicationDelegate {
     
     private var statusItem: NSStatusItem!
     private var menu: NSMenu!
@@ -35,6 +35,8 @@ class StackWindow: NSObject, NSApplicationDelegate {
         let addFileOption =  NSMenuItem(title: "Add File", action: #selector(addFileToStack), keyEquivalent: "a")
         menu.addItem(addFileOption)
         statusItem.menu = menu
+        
+        // MARK: restore data
         let storedFiles = defaults.dictionary(forKey: "files") as? [String: String] ?? [:]
         if !storedFiles.isEmpty {
             for (key, value) in storedFiles {
@@ -82,10 +84,6 @@ class StackWindow: NSObject, NSApplicationDelegate {
             index += 1
             defaults.set(urls, forKey: "files")
         }
-        
-        //        if urls.count == 4 {
-        //            menu.items[menu.items.count-1].isHidden = true
-        //        }
     }
     
     @objc func openFile(_ sender: NSMenuItem) {
