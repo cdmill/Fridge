@@ -21,10 +21,7 @@ extension FridgeMenu {
                 do {
                     bookmarks = try JSONDecoder().decode([URL: Data].self, from: data)
                     for (url, data) in bookmarks {
-                        let restored = try Bookmark(bookmarkData: data)
-                        let filename = url.lastPathComponent
-                        ffiles.append(FridgeFile(filename: filename, url: url, bookmark: restored))
-                        filesInFridge.insert(filename)
+                        addFile(url, restored: true, from: data)
                     }
                 } catch {
                     print("Error while decoding data:", error)
@@ -54,13 +51,13 @@ extension FridgeMenu {
             addFile(url)
         }
         
-        func addFile(_ url: URL) {
+        func addFile(_ url: URL, restored: Bool = false, from data: Data? = nil) {
             let filename = url.lastPathComponent
             if filesInFridge.contains(filename) {
                 return
             }
             do {
-                let bookmark = try Bookmark(targetFileURL: url)
+                let bookmark = restored ? try Bookmark(bookmarkData: data!) : try Bookmark(targetFileURL: url)
                 ffiles.append(FridgeFile(filename: filename, url: url, bookmark: bookmark))
                 filesInFridge.insert(filename)
                 bookmarks[url] = bookmark.bookmarkData
@@ -85,7 +82,6 @@ extension FridgeMenu {
             do {
                 _ = try ffiles[index].bookmark.usingTargetURL { targetURL in
                     NSWorkspace.shared.open(targetURL)
-                    
                 }
             } catch {
                 print("Error opening file: ", error)
