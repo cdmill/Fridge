@@ -24,7 +24,7 @@ extension FridgeMenu {
         
         func openDialog() {
             let dialog = NSOpenPanel()
-            dialog.title = "Choose a File to Add"
+            dialog.center()
             dialog.canChooseFiles = true
             dialog.canChooseDirectories = false
             dialog.allowsMultipleSelection = false
@@ -47,7 +47,6 @@ extension FridgeMenu {
         
         func addFile(_ url: URL) {
             let fileName = url.lastPathComponent
-            
             if filesInFridge.contains(fileName) {
                 return
             }
@@ -55,14 +54,14 @@ extension FridgeMenu {
             filesInFridge.insert(fileName)
         }
         
-        func removeFile(_ i: Int) {
-            bookmark.update(ffiles[i].url)
-            ffiles.remove(at: i)
-            filesInFridge.remove(ffiles[i].filename)
+        func removeFile(_ index: Int) {
+            bookmark.update(ffiles[index].url)
+            ffiles.remove(at: index)
+            filesInFridge.remove(ffiles[index].filename)
         }
         
-        func openFile(_ i: Int) {
-            let url = ffiles[i].url
+        func openFile(_ index: Int) {
+            let url = ffiles[index].url
             if bookmark.isPermissionGranted(for: url) {
                 NSWorkspace.shared.open(url)
             }

@@ -33,7 +33,7 @@ class Bookmark {
                     bookmarkDataIsStale: &bookmarkDataIsStale) as URL
                 )
                 if bookmarkDataIsStale.boolValue {
-                    NSLog("WARNING stale security bookmark")
+                    NSLog("WARNING stale security bookmark.")
                     return false
                 }
                 return url.startAccessingSecurityScopedResource()
@@ -57,7 +57,7 @@ class Bookmark {
                 UserDefaults.standard.set(encoded, forKey: KEY)
             }
         } catch {
-            NSLog("Error storing bookmarks")
+            NSLog("Error storing bookmarks.")
         }
     }
     

@@ -10,7 +10,8 @@ import SwiftUI
 
 struct FridgeMenu: View {
     @StateObject private var fridgeModel = Fridge()
-    @State var hovered = -1
+    @State private var hovered = -1
+    @State private var inEditMode = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -19,29 +20,32 @@ struct FridgeMenu: View {
                 Spacer()
                 HStack{
                     Button{fridgeModel.openDialog()} label: {Image(systemName: "plus.circle")}.buttonStyle(.borderless)
-                    
-                    Button{ NSApplication.shared.terminate(nil) } label: {Image(systemName: "x.circle.fill")}.buttonStyle(.borderless)
+                    Button{inEditMode.toggle()} label: {inEditMode ? Image(systemName: "minus.circle.fill") : Image(systemName: "minus.circle")}.buttonStyle(.borderless)
+                    Button{ NSApplication.shared.terminate(nil) } label: {Image(systemName: "x.circle")}.buttonStyle(.borderless)
                 }.padding()
             }
-            Divider().padding().padding(.top, -25)
+            Divider().padding().padding(.bottom, -15).padding(.top, -20)
             ForEach(0..<fridgeModel.ffiles.count, id: \.self) { i in
                 if !fridgeModel.ffiles.isEmpty {
                     ZStack {
                         HStack {
-                            Button{fridgeModel.openFile(i)} label: {Text(fridgeModel.ffiles[i].filename).padding(8).frame(maxWidth: .infinity, alignment: .leading)}
+                            Button{if !inEditMode {fridgeModel.openFile(i)}} label: {Text(fridgeModel.ffiles[i].filename).padding(8).frame(maxWidth: .infinity, alignment: .leading)}
                                 .buttonStyle(.borderless)
                                 .onHover{ hover in
-                                    if hover { self.hovered = i}
+                                    if hover && !inEditMode { self.hovered = i}
                                     else { self.hovered = -1}}
                                 .background(self.hovered == i ? RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) : RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
                         }
                         HStack {
-                            Spacer()
-                            Button{fridgeModel.removeFile(i)} label: {Image(systemName: "minus.circle")}.buttonStyle(.borderless).padding()
+                            if inEditMode {
+                                Spacer()
+                                Button{fridgeModel.removeFile(i)} label: {Image(systemName: "minus.circle").foregroundColor(Color.red)}.buttonStyle(.borderless)
+                            }
                         }
-                    }.padding([.top, .bottom], -12)
+                    }.padding()
                 }
-            }.padding().padding(.top, -20)
-        }
+            }.padding([.top, .bottom], -15)
+        }.padding(.bottom)
     }
 }
+
