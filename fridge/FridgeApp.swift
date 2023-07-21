@@ -35,7 +35,7 @@ struct FridgeMenu: View {
         }
         Divider()
         Button{fridgeModel.openDialog()} label: {Image(systemName: "plus.circle")}
-        Button(action: fridgeModel.removeFile, label: {Text("RemoveFile")} )
+//        Button(action: fridgeModel.removeFile, label: {Text("RemoveFile")} )
         Divider()
         Button("Quit") { NSApplication.shared.terminate(nil) }
     }

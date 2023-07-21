@@ -42,7 +42,7 @@ extension FridgeMenu {
                 return
             }
             addFile(url)
-            saveFile(url)
+            bookmark.save(url)
         }
         
         func addFile(_ url: URL) {
@@ -53,10 +53,6 @@ extension FridgeMenu {
             }
             ffiles.append(FridgeFile(filename: fileName, url: url))
             filesInFridge.insert(fileName)
-        }
-        
-        func saveFile(_ url: URL) {
-            bookmark.save(url)
         }
         
         func removeFile() {
