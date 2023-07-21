@@ -13,12 +13,22 @@ extension FridgeMenu {
         
         @Published var ffiles: [FridgeFile] = []
         private var filesInFridge: Set<String> = []
-        private let bookmark = Bookmark()
+        private var bookmarks = [URL: Data]()
+        private let KEY = "stored-bookmarks"
         
         init() {
-            bookmark.restore()
-            for url in bookmark.bookmarks.keys {
-                addFile(url)
+            if let data = UserDefaults.standard.data(forKey: KEY) {
+                do {
+                    bookmarks = try JSONDecoder().decode([URL: Data].self, from: data)
+                    for (url, data) in bookmarks {
+                        let restored = try Bookmark(bookmarkData: data)
+                        let filename = url.lastPathComponent
+                        ffiles.append(FridgeFile(filename: filename, url: url, bookmark: restored))
+                        filesInFridge.insert(filename)
+                    }
+                } catch {
+                    print("Error while decoding data:", error)
+                }
             }
         }
         
@@ -42,28 +52,43 @@ extension FridgeMenu {
                 return
             }
             addFile(url)
-            bookmark.save(url)
         }
         
         func addFile(_ url: URL) {
-            let fileName = url.lastPathComponent
-            if filesInFridge.contains(fileName) {
+            let filename = url.lastPathComponent
+            if filesInFridge.contains(filename) {
                 return
             }
-            ffiles.append(FridgeFile(filename: fileName, url: url))
-            filesInFridge.insert(fileName)
+            do {
+                let bookmark = try Bookmark(targetFileURL: url)
+                ffiles.append(FridgeFile(filename: filename, url: url, bookmark: bookmark))
+                filesInFridge.insert(filename)
+                bookmarks[url] = bookmark.bookmarkData
+                encode()
+            } catch {
+                print("Error saving data:", error)
+            }
+        }
+        
+        func encode() {
+            if let encoded = try? JSONEncoder().encode(bookmarks) {
+                UserDefaults.standard.set(encoded, forKey: KEY)
+            }
         }
         
         func removeFile(_ index: Int) {
-            bookmark.update(ffiles[index].url)
-            ffiles.remove(at: index)
             filesInFridge.remove(ffiles[index].filename)
+            ffiles.remove(at: index)
         }
         
         func openFile(_ index: Int) {
-            let url = ffiles[index].url
-            if bookmark.isPermissionGranted(for: url) {
-                NSWorkspace.shared.open(url)
+            do {
+                _ = try ffiles[index].bookmark.usingTargetURL { targetURL in
+                    NSWorkspace.shared.open(targetURL)
+                    
+                }
+            } catch {
+                print("Error opening file: ", error)
             }
         }
     }
