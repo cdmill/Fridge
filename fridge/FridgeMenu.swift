@@ -26,18 +26,22 @@ struct FridgeMenu: View {
             Divider().padding().padding(.top, -25)
             ForEach(0..<fridgeModel.ffiles.count, id: \.self) { i in
                 if !fridgeModel.ffiles.isEmpty {
-                    HStack {
-                        Button{fridgeModel.openFile(i)} label: {Text(fridgeModel.ffiles[i].filename).padding(8).frame(maxWidth: .infinity, alignment: .leading)}
-                            .buttonStyle(.borderless)
-                            .onHover{ hover in
-                                if hover { self.hovered = i}
-                                else { self.hovered = -1}}
-                            .background(self.hovered == i ? RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) : RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
-                        Spacer()
-                        Button{fridgeModel.removeFile(i)} label: {Image(systemName: "minus.circle")}.buttonStyle(.borderless)
-                    }
+                    ZStack {
+                        HStack {
+                            Button{fridgeModel.openFile(i)} label: {Text(fridgeModel.ffiles[i].filename).padding(8).frame(maxWidth: .infinity, alignment: .leading)}
+                                .buttonStyle(.borderless)
+                                .onHover{ hover in
+                                    if hover { self.hovered = i}
+                                    else { self.hovered = -1}}
+                                .background(self.hovered == i ? RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) : RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
+                        }
+                        HStack {
+                            Spacer()
+                            Button{fridgeModel.removeFile(i)} label: {Image(systemName: "minus.circle")}.buttonStyle(.borderless).padding()
+                        }
+                    }.padding([.top, .bottom], -12)
                 }
-            }.padding().padding(.top, -25)
+            }.padding().padding(.top, -20)
         }
     }
 }
