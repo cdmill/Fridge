@@ -18,7 +18,7 @@ extension FridgeMenu {
         init() {
             bookmark.restore()
             for url in bookmark.bookmarks.keys {
-               addFile(url)
+                addFile(url)
             }
         }
         
@@ -55,8 +55,10 @@ extension FridgeMenu {
             filesInFridge.insert(fileName)
         }
         
-        func removeFile() {
-            
+        func removeFile(_ i: Int) {
+            bookmark.update(ffiles[i].url)
+            ffiles.remove(at: i)
+            filesInFridge.remove(ffiles[i].filename)
         }
         
         func openFile(_ i: Int) {

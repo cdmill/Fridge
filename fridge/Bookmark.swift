@@ -16,7 +16,7 @@ class Bookmark {
             do {
                 bookmarks = try JSONDecoder().decode([URL: Data].self, from: data)
             } catch {
-               print("Error while decoding data: ", error)
+                print("Error while decoding data: ", error)
             }
         }
     }
@@ -44,7 +44,7 @@ class Bookmark {
         }
         return false
     }
-        
+    
     func save(_ url: URL) {
         do {
             let data = try url.bookmarkData(
@@ -58,6 +58,13 @@ class Bookmark {
             }
         } catch {
             NSLog("Error storing bookmarks")
+        }
+    }
+    
+    func update(_ url: URL) {
+        bookmarks.removeValue(forKey: url)
+        if let encoded = try? JSONEncoder().encode(bookmarks) {
+            UserDefaults.standard.set(encoded, forKey: KEY)
         }
     }
 }
