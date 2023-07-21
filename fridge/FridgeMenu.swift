@@ -33,13 +33,17 @@ struct FridgeMenu: View {
                                 .buttonStyle(.borderless)
                                 .onHover{ hover in
                                     if hover && !inEditMode { self.hovered = i}
-                                    else { self.hovered = -1}}
-                                .background(self.hovered == i ? RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) : RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
+                                    else { self.hovered = -1 }}
+                                .background(self.hovered == i && !inEditMode ? RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) : RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
                         }
                         HStack {
                             if inEditMode {
                                 Spacer()
                                 Button{fridgeModel.removeFile(i)} label: {Image(systemName: "minus.circle").foregroundColor(Color.red)}.buttonStyle(.borderless)
+                                    .onHover{ hover in
+                                        if hover && inEditMode { self.hovered = i}
+                                        else { self.hovered = -1 }}
+                                    .scaleEffect(self.hovered == i && inEditMode ? 1.2 : 1.0)
                             }
                         }
                     }.padding()
