@@ -12,6 +12,9 @@ struct FridgeMenu: View {
     @StateObject private var fridgeModel = Fridge()
     @State private var hovered = -1
     @State private var inEditMode = false
+    @State private var addFileButtonHovered = false
+    @State private var editButtonHovered = false
+    @State private var quitButtonHovered = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -20,8 +23,23 @@ struct FridgeMenu: View {
                 Spacer()
                 HStack{
                     Button{fridgeModel.openDialog()} label: {Image(systemName: "plus.circle")}.buttonStyle(.borderless)
+                        .onHover{ hover in
+                            if hover { self.addFileButtonHovered = true}
+                            else { self.addFileButtonHovered = false}
+                        }
+                        .scaleEffect(self.addFileButtonHovered ? 1.1 : 1.0)
                     Button{inEditMode.toggle()} label: {inEditMode ? Image(systemName: "minus.circle.fill") : Image(systemName: "minus.circle")}.buttonStyle(.borderless)
+                        .onHover{ hover in
+                            if hover { self.editButtonHovered = true}
+                            else { self.editButtonHovered = false}
+                        }
+                        .scaleEffect(self.editButtonHovered ? 1.1 : 1.0)
                     Button{ NSApplication.shared.terminate(nil) } label: {Image(systemName: "x.circle")}.buttonStyle(.borderless)
+                        .onHover{ hover in
+                            if hover { self.quitButtonHovered = true}
+                            else { self.quitButtonHovered = false}
+                        }
+                        .scaleEffect(self.quitButtonHovered ? 1.1 : 1.0)
                 }.padding()
             }
             Divider().padding().padding(.bottom, -15).padding(.top, -20)
@@ -43,7 +61,7 @@ struct FridgeMenu: View {
                                     .onHover{ hover in
                                         if hover && inEditMode { self.hovered = i}
                                         else { self.hovered = -1 }}
-                                    .scaleEffect(self.hovered == i && inEditMode ? 1.2 : 1.0)
+                                    .scaleEffect(self.hovered == i && inEditMode ? 1.1 : 1.0)
                             }
                         }
                     }.padding()
