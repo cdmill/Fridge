@@ -17,14 +17,12 @@ extension FridgeMenu {
         private let KEY = "stored-bookmarks"
         
         init() {
+            /// decode and rebuild possible saved bookmarks
             if let data = UserDefaults.standard.data(forKey: KEY) {
-                do {
-                    bookmarks = try JSONDecoder().decode([URL: Data].self, from: data)
+                if let bookmarks = try? JSONDecoder().decode([URL: Data].self, from: data) {
                     for (url, data) in bookmarks {
                         addFile(url, restored: true, from: data)
                     }
-                } catch {
-                    print("Error while decoding data:", error)
                 }
             }
         }
@@ -41,11 +39,11 @@ extension FridgeMenu {
             dialog.allowedContentTypes = [.pdf]
             
             guard dialog.runModal() == NSApplication.ModalResponse.OK else {
-                // Cancel was pressed
+                /// cancel was pressed
                 return
             }
             guard let url = dialog.url else {
-                // Something went wrong
+                /// something went wrong
                 return
             }
             addFile(url)
@@ -56,14 +54,11 @@ extension FridgeMenu {
             if filesInFridge.contains(filename) {
                 return
             }
-            do {
-                let bookmark = restored ? try Bookmark(bookmarkData: data!) : try Bookmark(targetFileURL: url)
+            if let bookmark = restored ? try? Bookmark(bookmarkData: data!) : try? Bookmark(targetFileURL: url) {
                 ffiles.append(FridgeFile(filename: filename, url: url, bookmark: bookmark))
                 filesInFridge.insert(filename)
                 bookmarks[url] = bookmark.bookmarkData
                 encode()
-            } catch {
-                print("Error saving data:", error)
             }
         }
         
@@ -79,12 +74,8 @@ extension FridgeMenu {
         }
         
         func openFile(_ index: Int) {
-            do {
-                _ = try ffiles[index].bookmark.usingTargetURL { targetURL in
-                    NSWorkspace.shared.open(targetURL)
-                }
-            } catch {
-                print("Error opening file: ", error)
+            let _ = try? ffiles[index].bookmark.usingTargetURL { targetURL in
+                NSWorkspace.shared.open(targetURL)
             }
         }
     }
