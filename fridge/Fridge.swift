@@ -69,8 +69,10 @@ extension FridgeMenu {
         }
         
         func removeFile(_ index: Int) {
+            bookmarks.removeValue(forKey: ffiles[index].url)
             filesInFridge.remove(ffiles[index].filename)
             ffiles.remove(at: index)
+            encode()
         }
         
         func openFile(_ index: Int) {

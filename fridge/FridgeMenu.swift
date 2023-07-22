@@ -19,7 +19,7 @@ struct FridgeMenu: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack{
-                Text("Fridge").padding().font(.system(.callout).weight(.semibold)).foregroundColor(.white)
+                Text("Fridge").padding().font(.system(.body)).foregroundColor(.white)
                 Spacer()
                 HStack{
                     Button{fridgeModel.openDialog()} label: {Image(systemName: "plus.circle")}.buttonStyle(.borderless)
