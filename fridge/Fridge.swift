@@ -12,7 +12,6 @@ extension FridgeMenu {
     @MainActor class Fridge: ObservableObject {
         
         @Published var ffiles: [FridgeFile] = []
-        private var filesInFridge: Set<String> = []
         private var bookmarks = [URL: Data]()
         private let KEY = "stored-bookmarks"
         
@@ -21,7 +20,7 @@ extension FridgeMenu {
             if let data = UserDefaults.standard.data(forKey: KEY) {
                 if let bookmarks = try? JSONDecoder().decode([URL: Data].self, from: data) {
                     for (url, data) in bookmarks {
-                        addFile(url, restored: true, from: data)
+                        addFile(url, from: data)
                     }
                 }
             }
@@ -46,17 +45,14 @@ extension FridgeMenu {
                 /// something went wrong
                 return
             }
-            addFile(url)
+            if !bookmarks.keys.contains(url) {
+                addFile(url)
+            }
         }
         
-        func addFile(_ url: URL, restored: Bool = false, from data: Data? = nil) {
-            let filename = url.lastPathComponent
-            if filesInFridge.contains(filename) {
-                return
-            }
-            if let bookmark = restored ? try? Bookmark(bookmarkData: data!) : try? Bookmark(targetFileURL: url) {
-                ffiles.append(FridgeFile(filename: filename, url: url, bookmark: bookmark))
-                filesInFridge.insert(filename)
+        func addFile(_ url: URL, from data: Data? = nil) {
+            if let bookmark = data == nil ? try? Bookmark(bookmarkData: data!) : try? Bookmark(targetFileURL: url) {
+                ffiles.append(FridgeFile(filename: url.lastPathComponent, url: url, bookmark: bookmark))
                 bookmarks[url] = bookmark.bookmarkData
                 encode()
             }
@@ -70,7 +66,6 @@ extension FridgeMenu {
         
         func removeFile(_ index: Int) {
             bookmarks.removeValue(forKey: ffiles[index].url)
-            filesInFridge.remove(ffiles[index].filename)
             ffiles.remove(at: index)
             encode()
         }
