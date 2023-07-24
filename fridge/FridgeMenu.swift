@@ -63,3 +63,44 @@ struct FridgeMenu: View {
         }.padding(.bottom)
     }
 }
+
+//struct PrimitiveScaleButton: PrimitiveButtonStyle {
+//    
+//    func makeBody(configuration: Self.Configuration) -> some View {
+//        ScaleButton(configuration: configuration, scaleAmount: 1.1)
+//    }
+//}
+//
+//private extension PrimitiveScaleButton {
+//    struct ScaleButton: View {
+//        
+//        private enum State {
+//            case hovering
+//            case outOfBounds
+//            
+//            var isHovering: Bool {
+//                switch self {
+//                case .hovering:
+//                    return true
+//                default:
+//                    return false
+//                }
+//            }
+//        }
+//        
+//        @State private var isPressed = false
+//        
+//        let configuration: PrimitiveScaleButton.Configuration
+//        let scaleAmount: CGFloat
+//        
+//        var body: some View {
+//            .onHover(hover in
+//                     if hover {
+//                State = .hovering
+//            })
+//        }
+//        
+//        
+//        
+//    }
+//}
