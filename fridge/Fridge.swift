@@ -12,8 +12,6 @@ extension FridgeMenu {
     @MainActor class Fridge: ObservableObject {
         
         @Published var ffiles: [FridgeFile] = []
-//        @Published var fgroups: [[FridgeFile]] = []
-//        public var usedSlots: Int {ffiles.count + fgroups.count}
         private var bookmarks = [URL: Data]()
         private let KEY = "stored-bookmarks"
         
@@ -30,7 +28,6 @@ extension FridgeMenu {
             }
         }
         
-        
         func openDialog() {
             let dialog = NSOpenPanel()
             dialog.center()
@@ -46,7 +43,7 @@ extension FridgeMenu {
                 dialog.runModal() == NSApplication.ModalResponse.OK,
                 let url = dialog.url
             else {
-                /// cancel was pressed
+                /// cancel was pressed or something went wrong
                 return
             }
             if !bookmarks.keys.contains(url) {
@@ -56,8 +53,8 @@ extension FridgeMenu {
         
         func addFile(_ url: URL, from data: Data? = nil) {
             guard let bookmark = data == nil ?
-                    try? Bookmark(targetFileURL: url, options: [.withSecurityScope, .securityScopeAllowOnlyReadAccess]) :
-                    try? Bookmark(bookmarkData: data!, validate: true)
+                    try? Bookmark(targetFileURL: url) :
+                    try? Bookmark(bookmarkData: data!)
             else {
                 return
             }
@@ -80,11 +77,25 @@ extension FridgeMenu {
         }
         
         func openFile(_ index: Int) {
-            let bookmark = try? ffiles[index].bookmark.usingTargetURL(options: .withSecurityScope) { targetURL in
+            let bookmark = ffiles[index].bookmark
+            let returnedState = try? ffiles[index].bookmark.usingTargetURL { targetURL in
                 NSWorkspace.shared.open(targetURL)
             }
-            if bookmark?.bookmarkState == .invalid || bookmark?.bookmarkState == .stale {
+            if returnedState?.bookmarkState == .invalid {
                 removeFile(index)
+            }
+            if returnedState?.bookmarkState == .stale {
+                /// file has been moved or renamed >> update bookmark and url
+                guard let url = try? bookmark.targetURL().url,
+                      let updatedBookmark = try? Bookmark(targetFileURL: url)
+                else {
+                    return
+                }
+                bookmarks.removeValue(forKey: ffiles[index].url)
+                ffiles[index].url = url
+                ffiles[index].bookmark = updatedBookmark
+                bookmarks[url] = updatedBookmark.bookmarkData
+                encode()
             }
         }
     }
