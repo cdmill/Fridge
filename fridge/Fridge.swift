@@ -12,16 +12,17 @@ extension FridgeMenu {
     @MainActor class Fridge: ObservableObject {
         
         @Published var ffiles: [FridgeFile] = []
+//        @Published var fgroups: [[FridgeFile]] = []
+//        public var usedSlots: Int {ffiles.count + fgroups.count}
         private var bookmarks = [URL: Data]()
         private let KEY = "stored-bookmarks"
         
         init() {
             /// decode and rebuild possible saved bookmarks
-            if let data = UserDefaults.standard.data(forKey: KEY) {
-                if let bookmarks = try? JSONDecoder().decode([URL: Data].self, from: data) {
-                    for (url, data) in bookmarks {
-                        addFile(url, from: data)
-                    }
+            guard let data = UserDefaults.standard.data(forKey: KEY) else { return }
+            if let bookmarks = try? JSONDecoder().decode([URL: Data].self, from: data) {
+                for (url, data) in bookmarks {
+                    addFile(url, from: data)
                 }
             }
         }
@@ -51,11 +52,13 @@ extension FridgeMenu {
         }
         
         func addFile(_ url: URL, from data: Data? = nil) {
-            if let bookmark = data == nil ? try? Bookmark(bookmarkData: data!) : try? Bookmark(targetFileURL: url) {
-                ffiles.append(FridgeFile(filename: url.lastPathComponent, url: url, bookmark: bookmark))
-                bookmarks[url] = bookmark.bookmarkData
-                encode()
+            guard let bookmark = data == nil ? try? Bookmark(targetFileURL: url) : try? Bookmark(bookmarkData: data!) else {
+                return
             }
+            ffiles.append(FridgeFile(filename: url.lastPathComponent, url: url, bookmark: bookmark))
+            ffiles.sort(by: { $0.filename.lowercased() < $1.filename.lowercased()} )
+            bookmarks[url] = bookmark.bookmarkData
+            encode()
         }
         
         func encode() {
@@ -71,8 +74,11 @@ extension FridgeMenu {
         }
         
         func openFile(_ index: Int) {
-            let _ = try? ffiles[index].bookmark.usingTargetURL { targetURL in
+            let bookmark = try? ffiles[index].bookmark.usingTargetURL { targetURL in
                 NSWorkspace.shared.open(targetURL)
+            }
+            if bookmark?.bookmarkState == .invalid || bookmark?.bookmarkState == .stale {
+                removeFile(index)
             }
         }
     }

@@ -22,13 +22,15 @@ struct FridgeMenu: View {
                 Text("Fridge").padding().font(.system(.body)).foregroundColor(.white)
                 Spacer()
                 HStack{
-                    Button{fridgeModel.openDialog()} label: {Image(systemName: "plus.circle")}.buttonStyle(.borderless)
-                        .onHover{ hover in self.addFileButtonHovered = hover }
-                        .scaleEffect(self.addFileButtonHovered ? 1.1 : 1.0)
+                    if fridgeModel.ffiles.count < 4 {
+                        Button{inEditMode = false; fridgeModel.openDialog()} label: {Image(systemName: "plus.circle")}.buttonStyle(.borderless)
+                            .onHover{ hover in self.addFileButtonHovered = hover }
+                            .scaleEffect(self.addFileButtonHovered ? 1.1 : 1.0)
+                    }
                     Button{inEditMode.toggle()} label: {inEditMode ? Image(systemName: "minus.circle.fill") : Image(systemName: "minus.circle")}.buttonStyle(.borderless)
                         .onHover{ hover in editButtonHovered = hover }
                         .scaleEffect(self.editButtonHovered ? 1.1 : 1.0)
-                    Button{ NSApplication.shared.terminate(nil) } label: {Image(systemName: "x.circle")}.buttonStyle(.borderless)
+                    Button{inEditMode = false; NSApplication.shared.terminate(nil) } label: {Image(systemName: "x.circle")}.buttonStyle(.borderless)
                         .onHover{ hover in quitButtonHovered = hover }
                         .scaleEffect(self.quitButtonHovered ? 1.1 : 1.0)
                 }.padding()
