@@ -64,12 +64,6 @@ extension FridgeMenu {
             encode()
         }
         
-        func encode() {
-            if let encoded = try? JSONEncoder().encode(bookmarks) {
-                UserDefaults.standard.set(encoded, forKey: KEY)
-            }
-        }
-        
         func removeFile(_ index: Int) {
             bookmarks.removeValue(forKey: ffiles[index].url)
             ffiles.remove(at: index)
@@ -84,18 +78,20 @@ extension FridgeMenu {
             if returnedState?.bookmarkState == .invalid {
                 removeFile(index)
             }
-            if returnedState?.bookmarkState == .stale {
+            else if returnedState?.bookmarkState == .stale {
                 /// file has been moved or renamed >> update bookmark and url
-                guard let url = try? bookmark.targetURL().url,
-                      let updatedBookmark = try? Bookmark(targetFileURL: url)
+                guard let url = try? bookmark.targetURL().url
                 else {
                     return
                 }
-                bookmarks.removeValue(forKey: ffiles[index].url)
-                ffiles[index].url = url
-                ffiles[index].bookmark = updatedBookmark
-                bookmarks[url] = updatedBookmark.bookmarkData
-                encode()
+                removeFile(index)
+                addFile(url)
+            }
+        }
+        
+        private func encode() {
+            if let encoded = try? JSONEncoder().encode(bookmarks) {
+                UserDefaults.standard.set(encoded, forKey: KEY)
             }
         }
     }

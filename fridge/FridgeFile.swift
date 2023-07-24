@@ -8,7 +8,7 @@
 import Foundation
 
 struct FridgeFile: Codable {
-    let filename: String
+    var filename: String
     var url: URL
     var bookmark: Bookmark
 }
