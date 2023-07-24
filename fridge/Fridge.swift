@@ -52,7 +52,7 @@ extension FridgeMenu {
         }
         
         func addFile(_ url: URL, from data: Data? = nil) {
-            guard let bookmark = data == nil ?
+            guard let bookmark = (data == nil) ?
                     try? Bookmark(targetFileURL: url) :
                     try? Bookmark(bookmarkData: data!)
             else {
