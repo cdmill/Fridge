@@ -19,13 +19,17 @@ extension FridgeMenu {
         
         init() {
             /// decode and rebuild possible saved bookmarks
-            guard let data = UserDefaults.standard.data(forKey: KEY) else { return }
-            if let bookmarks = try? JSONDecoder().decode([URL: Data].self, from: data) {
-                for (url, data) in bookmarks {
-                    addFile(url, from: data)
-                }
+            guard
+                let data = UserDefaults.standard.data(forKey: KEY),
+                let bookmarks = try? JSONDecoder().decode([URL: Data].self, from: data)
+            else {
+                return
+            }
+            for (url, data) in bookmarks {
+                addFile(url, from: data)
             }
         }
+        
         
         func openDialog() {
             let dialog = NSOpenPanel()
@@ -38,12 +42,11 @@ extension FridgeMenu {
             dialog.orderFrontRegardless()
             dialog.allowedContentTypes = [.pdf]
             
-            guard dialog.runModal() == NSApplication.ModalResponse.OK else {
+            guard
+                dialog.runModal() == NSApplication.ModalResponse.OK,
+                let url = dialog.url
+            else {
                 /// cancel was pressed
-                return
-            }
-            guard let url = dialog.url else {
-                /// something went wrong
                 return
             }
             if !bookmarks.keys.contains(url) {
@@ -52,7 +55,10 @@ extension FridgeMenu {
         }
         
         func addFile(_ url: URL, from data: Data? = nil) {
-            guard let bookmark = data == nil ? try? Bookmark(targetFileURL: url) : try? Bookmark(bookmarkData: data!) else {
+            guard let bookmark = data == nil ?
+                    try? Bookmark(targetFileURL: url, options: [.withSecurityScope, .securityScopeAllowOnlyReadAccess]) :
+                    try? Bookmark(bookmarkData: data!, validate: true)
+            else {
                 return
             }
             ffiles.append(FridgeFile(filename: url.lastPathComponent, url: url, bookmark: bookmark))
@@ -74,7 +80,7 @@ extension FridgeMenu {
         }
         
         func openFile(_ index: Int) {
-            let bookmark = try? ffiles[index].bookmark.usingTargetURL { targetURL in
+            let bookmark = try? ffiles[index].bookmark.usingTargetURL(options: .withSecurityScope) { targetURL in
                 NSWorkspace.shared.open(targetURL)
             }
             if bookmark?.bookmarkState == .invalid || bookmark?.bookmarkState == .stale {

@@ -22,20 +22,8 @@
 import Foundation
 import UniformTypeIdentifiers
 
-/// A bookmark object that describes the location of a file.
-///
-/// Whereas path and file reference URLs are potentially fragile between launches of your app, a bookmark can
-/// usually be used to re-create a URL to a file even in cases where the file was moved or renamed.
-///
-/// Links :-
-///
-/// [Locating Files Using Bookmarks](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/AccessingFilesandDirectories/AccessingFilesandDirectories.html#//apple_ref/doc/uid/TP40010672-CH3-SW10)
-///
-/// [Enabling Security-Scoped Bookmark and URL Access](https://developer.apple.com/documentation/professional_video_applications/fcpxml_reference/asset/media-rep/bookmark/enabling_security-scoped_bookmark_and_url_access)
-///
-/// [Bookmarks and Security Scope](https://developer.apple.com/documentation/foundation/nsurl#1663783)
 @available(macOS 10.12, *)
-public class Bookmark: CustomStringConvertible, Codable {
+public class Bookmark: Codable {
     enum CodingKeys: CodingKey {
         case bookmarkData
     }
@@ -133,31 +121,9 @@ public class Bookmark: CustomStringConvertible, Codable {
     public init(bookmarkData: Data, validate: Bool = false) throws {
         if validate {
             var isStale = false
-            let _ = try URL(resolvingBookmarkData: bookmarkData, bookmarkDataIsStale: &isStale)
+            let _ = try URL(resolvingBookmarkData: bookmarkData, options: [.withSecurityScope], bookmarkDataIsStale: &isStale)
         }
         self.bookmarkData = bookmarkData
-    }
-    
-    /// Create from data within a decoder
-    public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.bookmarkData = try container.decode(Data.self, forKey: .bookmarkData)
-    }
-    
-    /// Encode the bookmark data to an encoder
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.bookmarkData, forKey: .bookmarkData)
-    }
-}
-
-public extension Bookmark {
-    /// A textual representation of this instance.
-    var description: String {
-        if let url = try? targetURL(options: .withSecurityScope) {
-            return "Bookmark(🔒): '\(url)'"
-        }
-        return "<invalid bookmark>"
     }
 }
 
