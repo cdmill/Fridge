@@ -37,7 +37,7 @@ extension FridgeMenu {
             dialog.canResolveUbiquitousConflicts = false
             dialog.canDownloadUbiquitousContents = true
             dialog.orderFrontRegardless()
-            dialog.allowedContentTypes = [.pdf]
+            dialog.allowedContentTypes = [.pdf, .plainText, .text]
             
             guard
                 dialog.runModal() == NSApplication.ModalResponse.OK,
@@ -58,7 +58,7 @@ extension FridgeMenu {
             else {
                 return
             }
-            ffiles.append(FridgeFile(filename: url.lastPathComponent, url: url, bookmark: bookmark))
+            ffiles.addFridgeFile(FridgeFile(filename: url.lastPathComponent, url: url, bookmark: bookmark))
             ffiles.sort(by: { $0.filename.lowercased() < $1.filename.lowercased()} )
             bookmarks[url] = bookmark.bookmarkData
             encode()
@@ -93,6 +93,22 @@ extension FridgeMenu {
             if let encoded = try? JSONEncoder().encode(bookmarks) {
                 UserDefaults.standard.set(encoded, forKey: KEY)
             }
+        }
+    }
+}
+
+extension Array where Element == FridgeFile {
+    
+    var hasAvailableSlots: Bool {
+        get {
+            self.count != 4
+        }
+    }
+    
+    mutating func addFridgeFile(_ ffile: FridgeFile) {
+        /// limit number of FridgeFiles in Fridge
+        if self.count < 4 {
+            self.append(ffile)
         }
     }
 }

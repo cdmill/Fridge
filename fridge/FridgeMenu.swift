@@ -18,7 +18,7 @@ struct FridgeMenu: View {
                 Text("Fridge").padding().font(.system(.body)).foregroundColor(.white)
                 Spacer()
                 HStack{
-                    if fridgeModel.ffiles.count < 4 {
+                    if fridgeModel.ffiles.hasAvailableSlots {
                         ScalingButton(systemName: "plus.circle", action: {inEditMode = false; fridgeModel.openDialog()} )
                     }
                     ScalingButton(systemName: inEditMode ? "minus.circle.fill" : "minus.circle", action: {inEditMode.toggle()} )
@@ -94,7 +94,7 @@ struct FileButton: View {
             .onHover{ hover in hovering = hover }
             .background(self.hovering ?
                         RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) :
-                        RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
+                            RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
     }
 }
 
