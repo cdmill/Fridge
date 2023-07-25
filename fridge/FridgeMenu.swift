@@ -45,7 +45,9 @@ struct FridgeMenu: View {
                                 .onHover{ hover in
                                     if hover && !inEditMode { self.hovered = i}
                                     else { self.hovered = -1 }}
-                                .background(self.hovered == i && !inEditMode ? RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) : RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
+                                .background(self.hovered == i && !inEditMode ?
+                                            RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) :
+                                            RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
                         }
                         HStack {
                             if inEditMode {
@@ -57,50 +59,9 @@ struct FridgeMenu: View {
                                     .scaleEffect(self.hovered == i && inEditMode ? 1.1 : 1.0)
                             }
                         }
-                    }.padding()
+                    }.padding().padding([.leading, .trailing], -8)
                 }
             }.padding([.top, .bottom], -15)
-        }.padding(.bottom)
+        }.padding(.bottom, 8)
     }
 }
-
-//struct PrimitiveScaleButton: PrimitiveButtonStyle {
-//    
-//    func makeBody(configuration: Self.Configuration) -> some View {
-//        ScaleButton(configuration: configuration, scaleAmount: 1.1)
-//    }
-//}
-//
-//private extension PrimitiveScaleButton {
-//    struct ScaleButton: View {
-//        
-//        private enum State {
-//            case hovering
-//            case outOfBounds
-//            
-//            var isHovering: Bool {
-//                switch self {
-//                case .hovering:
-//                    return true
-//                default:
-//                    return false
-//                }
-//            }
-//        }
-//        
-//        @State private var isPressed = false
-//        
-//        let configuration: PrimitiveScaleButton.Configuration
-//        let scaleAmount: CGFloat
-//        
-//        var body: some View {
-//            .onHover(hover in
-//                     if hover {
-//                State = .hovering
-//            })
-//        }
-//        
-//        
-//        
-//    }
-//}
