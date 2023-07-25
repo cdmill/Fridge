@@ -32,14 +32,17 @@ struct FridgeMenu: View {
                 ForEach(0..<fridgeModel.ffiles.count, id: \.self) { i in
                     ZStack {
                         if inEditMode {
-                            EditModeFileButton(text: fridgeModel.ffiles[i].filename, action: {if !inEditMode {fridgeModel.openFile(i)}} )
+                            EditModeFileButton(text: fridgeModel.ffiles[i].filename, action: {} )
                         } else {
-                            FileButton(text: fridgeModel.ffiles[i].filename, action: {if !inEditMode {fridgeModel.openFile(i)}} )
+                            FileButton(text: fridgeModel.ffiles[i].filename, action: {fridgeModel.openFile(i)} )
                         }
                         HStack {
                             if inEditMode {
                                 Spacer()
-                                ScalingButton(systemName: "minus.circle", color: Color.red, action: {fridgeModel.removeFile(i)} ).padding(.trailing)
+                                ScalingButton(systemName: "minus.circle",
+                                              color: Color.red,
+                                              isDynamic: false,
+                                              action: {fridgeModel.removeFile(i)} ).padding(.trailing)
                             }
                         }
                     }.padding().padding([.leading, .trailing], -8)
@@ -55,19 +58,23 @@ struct FridgeMenu: View {
 struct ScalingButton: View {
     let action: () -> Void
     let foreground: Color
+    let isDynamic: Bool
     let systemName: String
     @State var hovering = false
     
-    init(systemName: String, color foreground: Color = Color.white, action: @escaping () -> Void) {
+    init(systemName: String, color foreground: Color = Color.gray, isDynamic: Bool = true, action: @escaping () -> Void) {
         self.action = action
         self.foreground = foreground
+        self.isDynamic = isDynamic
         self.systemName = systemName
     }
     
     var body: some View {
-        Button(action: action, label: { Image(systemName: systemName).foregroundColor(foreground) }).buttonStyle(.borderless)
-            .onHover{ hover in hovering = hover }
-            .scaleEffect(self.hovering ? 1.1 : 1.0)
+        Button(action: action,
+               label: { Image(systemName: systemName).foregroundColor(self.hovering && isDynamic ? Color.white : foreground) })
+        .buttonStyle(.borderless)
+        .onHover{ hover in hovering = hover }
+        .scaleEffect(self.hovering ? 1.1 : 1.0)
     }
 }
 
@@ -82,7 +89,8 @@ struct FileButton: View {
     }
     
     var body: some View {
-        Button(action: action, label: { Text(text).padding(8).frame(maxWidth: .infinity, alignment: .leading) }).buttonStyle(.borderless)
+        Button(action: action, label: { Text(text).padding(8).frame(maxWidth: .infinity, alignment: .leading) })
+            .buttonStyle(.borderless)
             .onHover{ hover in hovering = hover }
             .background(self.hovering ?
                         RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) :
@@ -100,7 +108,9 @@ struct EditModeFileButton: View {
     }
     
     var body: some View {
-        Button(action: action, label: { Text(text).padding(8).frame(maxWidth: .infinity, alignment: .leading) }).buttonStyle(.borderless)
+        Button(action: action,
+               label: { Text(text).padding(8).frame(maxWidth: .infinity, alignment: .leading) })
+        .buttonStyle(.borderless)
     }
 }
 
