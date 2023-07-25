@@ -80,12 +80,12 @@ extension FridgeMenu {
             }
             else if returnedState?.bookmarkState == .stale {
                 /// file has been moved or renamed >> update bookmark and url
-                guard let url = try? bookmark.targetURL().url
+                guard let updatedURL = try? bookmark.targetURL().url
                 else {
                     return
                 }
                 removeFile(index)
-                addFile(url)
+                addFile(updatedURL)
             }
         }
         
