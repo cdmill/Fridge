@@ -71,21 +71,11 @@ extension FridgeMenu {
         }
         
         func openFile(_ index: Int) {
-            let bookmark = ffiles[index].bookmark
             let returnedState = try? ffiles[index].bookmark.usingTargetURL { targetURL in
                 NSWorkspace.shared.open(targetURL)
             }
-            if returnedState?.bookmarkState == .invalid {
+            if returnedState?.bookmarkState == .invalid || returnedState?.bookmarkState == .stale {
                 removeFile(index)
-            }
-            else if returnedState?.bookmarkState == .stale {
-                /// file has been moved or renamed >> update bookmark and url
-                guard let updatedURL = try? bookmark.targetURL().url
-                else {
-                    return
-                }
-                removeFile(index)
-                addFile(updatedURL)
             }
         }
         
