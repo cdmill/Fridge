@@ -1,5 +1,7 @@
 # FRIDGE
 
+A simple, lightweight, quick-access file storage macOS menubar application.
+
 <p align="center">
     <img src="https://img.shields.io/github/v/tag/cdmill/fridge" />
     <img src="https://img.shields.io/badge/License-MIT-lightgrey" />
