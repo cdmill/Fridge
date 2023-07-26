@@ -1,5 +1,11 @@
 # FRIDGE
 
+<p align="center">
+    <img src="https://img.shields.io/github/v/tag/cdmill/fridge" />
+    <img src="https://img.shields.io/badge/License-MIT-lightgrey" />
+    <img src="https://img.shields.io/badge/macOS-13+-red" />
+</p>
+
 **Fridge** brings a simple _quick access, read later_ (QARL) implementation to the macOS menu bar.
 It maintains the functionality of storing files on the desktop, but without the visual clutter.
 
