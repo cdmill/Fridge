@@ -8,7 +8,7 @@
 import Foundation
 import UniformTypeIdentifiers
 
-@available(macOS 10.12, *)
+@available(macOS 13, *)
 public class Bookmark: Codable {
 
     /// Bookmark-specific errors

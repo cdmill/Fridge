@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 extension FridgeMenu {
+    @available(macOS 13, *)
     @MainActor class Fridge: ObservableObject {
         
         @Published var ffiles: [FridgeFile] = []
@@ -74,9 +75,10 @@ extension FridgeMenu {
             let returnedState = try? ffiles[index].bookmark.usingTargetURL { targetURL in
                 NSWorkspace.shared.open(targetURL)
             }
-            if returnedState?.bookmarkState == .invalid || returnedState?.bookmarkState == .stale {
+            if returnedState?.bookmarkState == .invalid {
                 removeFile(index)
             }
+            // NOTE: not currently handling stale URLs
         }
         
         private func encode() {

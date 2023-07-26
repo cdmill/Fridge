@@ -21,7 +21,11 @@ struct FridgeMenu: View {
                     if fridgeModel.ffiles.hasAvailableSlots {
                         ScalingButton(systemName: "plus.circle", action: {inEditMode = false; fridgeModel.openDialog()} )
                     }
-                    ScalingButton(systemName: inEditMode ? "minus.circle.fill" : "minus.circle", action: {inEditMode.toggle()} )
+                    if inEditMode {
+                        ScalingButton(systemName: "minus.circle.fill", color: Color.white, isDynamic: false, action: {inEditMode.toggle()} )
+                    } else {
+                        ScalingButton(systemName: "minus.circle", action: {inEditMode.toggle()} )
+                    }
                     ScalingButton(systemName: "x.circle", action: {inEditMode = false; NSApplication.shared.terminate(nil)} )
                 }.padding()
             }
