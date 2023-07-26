@@ -67,7 +67,7 @@ struct ScalingButton: View {
     let systemName: String
     @State var hovering = false
     
-    init(systemName: String, color foreground: Color = Color.gray, isDynamic: Bool = true, action: @escaping () -> Void) {
+    init(systemName: String, color foreground: Color = Color.white, isDynamic: Bool = true, action: @escaping () -> Void) {
         self.action = action
         self.foreground = foreground
         self.isDynamic = isDynamic
@@ -76,7 +76,9 @@ struct ScalingButton: View {
     
     var body: some View {
         Button(action: action,
-               label: { Image(systemName: systemName).foregroundColor(self.hovering && isDynamic ? Color.white : foreground) })
+               label: { Image(systemName: systemName)
+                            .opacity((self.hovering && isDynamic) || (!isDynamic) ? 1.0 : 0.5)
+                            .foregroundColor(foreground) })
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }
         .scaleEffect(self.hovering ? 1.1 : 1.0)
@@ -94,12 +96,15 @@ struct FileButton: View {
     }
     
     var body: some View {
-        Button(action: action, label: { Text(text).padding(.leading, 10).padding([.top, .bottom], 8).frame(maxWidth: .infinity, alignment: .leading) })
-            .buttonStyle(.borderless)
-            .onHover{ hover in hovering = hover }
-            .background(self.hovering ?
-                        RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) :
-                        RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
+        Button(action: action, label: { Text(text)
+                                            .padding(.leading, 10)
+                                            .padding([.top, .bottom], 8)
+                                            .frame(maxWidth: .infinity, alignment: .leading) })
+        .buttonStyle(.borderless)
+        .onHover{ hover in hovering = hover }
+        .background(self.hovering ?
+                RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) :
+                RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
     }
 }
 
@@ -114,7 +119,10 @@ struct EditModeFileButton: View {
     
     var body: some View {
         Button(action: action,
-               label: { Text(text).padding(.leading, 10).padding([.top, .bottom], 8).frame(maxWidth: .infinity, alignment: .leading) })
+               label: { Text(text)
+                            .padding(.leading, 10)
+                            .padding([.top, .bottom], 8)
+                            .frame(maxWidth: .infinity, alignment: .leading) })
         .buttonStyle(.borderless)
     }
 }
