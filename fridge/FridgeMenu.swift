@@ -13,9 +13,9 @@ struct FridgeMenu: View {
     @State private var inEditMode = false
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 5) {
             HStack{
-                Text("Fridge").padding().font(.system(.body)).foregroundColor(.white)
+                Text("Fridge").padding([.leading, .trailing, .top]).font(.system(.body)).foregroundColor(.white)
                 Spacer()
                 HStack{
                     if fridgeModel.ffiles.hasAvailableSlots {
@@ -27,30 +27,31 @@ struct FridgeMenu: View {
                         ScalingButton(systemName: "minus.circle", action: {inEditMode.toggle()} )
                     }
                     ScalingButton(systemName: "x.circle", action: {inEditMode = false; NSApplication.shared.terminate(nil)} )
-                }.padding()
+                }.padding([.leading, .trailing, .top])
             }
-            
-            Divider().padding().padding(.bottom, -15).padding(.top, -20)
+            Divider().padding([.leading, .trailing])
             
             if !fridgeModel.ffiles.isEmpty {
-                ForEach(0..<fridgeModel.ffiles.count, id: \.self) { i in
-                    ZStack {
-                        if inEditMode {
-                            EditModeFileButton(text: fridgeModel.ffiles[i].filename, action: {} )
-                        } else {
-                            FileButton(text: fridgeModel.ffiles[i].filename, action: {fridgeModel.openFile(i)} )
-                        }
-                        HStack {
+                VStack(spacing: 5) {
+                    ForEach(0..<fridgeModel.ffiles.count, id: \.self) { i in
+                        ZStack {
                             if inEditMode {
-                                Spacer()
-                                ScalingButton(systemName: "minus.circle",
-                                              color: Color.red,
-                                              isDynamic: false,
-                                              action: {fridgeModel.removeFile(i)} ).padding(.trailing)
+                                EditModeFileButton(text: fridgeModel.ffiles[i].filename, action: {} )
+                            } else {
+                                FileButton(text: fridgeModel.ffiles[i].filename, action: {fridgeModel.openFile(i)} )
                             }
-                        }
-                    }.padding().padding([.leading, .trailing], -8)
-                }.padding([.top, .bottom], -15)
+                            HStack {
+                                if inEditMode {
+                                    Spacer()
+                                    ScalingButton(systemName: "minus.circle",
+                                                  color: Color.red,
+                                                  isDynamic: false,
+                                                  action: {fridgeModel.removeFile(i)} ).padding(.trailing)
+                                }
+                            }
+                        }.padding([.leading, .trailing], 8)
+                    }
+                }
             }
             
         }.padding(.bottom, 8)
@@ -93,7 +94,7 @@ struct FileButton: View {
     }
     
     var body: some View {
-        Button(action: action, label: { Text(text).padding(8).frame(maxWidth: .infinity, alignment: .leading) })
+        Button(action: action, label: { Text(text).padding(.leading, 10).padding([.top, .bottom], 8).frame(maxWidth: .infinity, alignment: .leading) })
             .buttonStyle(.borderless)
             .onHover{ hover in hovering = hover }
             .background(self.hovering ?
