@@ -7,7 +7,7 @@ Files can be stored for quick access from the menubar, with a maximum of 4 slots
 
 ## Downloading FRIDGE
 
-Direct downloads can be found on the [https://github.com/cdmill/fridge/releases/tag/v1.0](releases) page.
+Direct downloads can be found on the [releases](https://github.com/cdmill/fridge/releases/tag/v1.0) page.
 
 After downloading and extracting, drag the `.app` file to your Applications folder.
 
