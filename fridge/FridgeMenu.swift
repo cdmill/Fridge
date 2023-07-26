@@ -99,7 +99,7 @@ struct FileButton: View {
             .onHover{ hover in hovering = hover }
             .background(self.hovering ?
                         RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) :
-                            RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
+                        RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
     }
 }
 
@@ -114,7 +114,7 @@ struct EditModeFileButton: View {
     
     var body: some View {
         Button(action: action,
-               label: { Text(text).padding(8).frame(maxWidth: .infinity, alignment: .leading) })
+               label: { Text(text).padding(.leading, 10).padding([.top, .bottom], 8).frame(maxWidth: .infinity, alignment: .leading) })
         .buttonStyle(.borderless)
     }
 }
