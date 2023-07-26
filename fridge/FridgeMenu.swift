@@ -22,7 +22,7 @@ struct FridgeMenu: View {
                         ScalingButton(systemName: "plus.circle", action: {inEditMode = false; fridgeModel.openDialog()} )
                     }
                     if inEditMode {
-                        ScalingButton(systemName: "minus.circle.fill", color: Color.white, isDynamic: false, action: {inEditMode.toggle()} )
+                        ScalingButton(systemName: "minus.circle.fill", isDynamic: false, action: {inEditMode.toggle()} )
                     } else {
                         ScalingButton(systemName: "minus.circle", action: {inEditMode.toggle()} )
                     }
