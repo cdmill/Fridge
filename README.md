@@ -6,7 +6,7 @@
     <img src="https://img.shields.io/badge/macOS-13+-red" />
 </p>
 
-A simple, lightweight, quick-access file storage for the macOS menubar.
+Simple, lightweight, quick-access file storage for the macOS menubar.
 
 ---
 
