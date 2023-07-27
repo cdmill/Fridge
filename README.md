@@ -13,7 +13,7 @@ Simple, lightweight, quick-access file storage for the macOS menubar.
 Fridge brings a _quick access, read later_ (QARL) implementation to the macOS menu bar.
 It maintains the functionality of storing files on the desktop, but without the visual clutter.
 
-As of version `1.1`, a maximum of 4 file slots are available.
+As of version `1.1` a maximum of 4 file slots are available.
 This is enforced to keep the workflow focused, but a possible future feature could be _file groups_ which would provide more file slots while providing some form of organization.
 
 ## Downloading FRIDGE
