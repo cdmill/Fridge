@@ -14,7 +14,7 @@ struct FridgeApp: App {
         MenuBarExtra {
             FridgeMenu()
         } label: {
-            let icon = NSImage(systemSymbolName: "refrigerator.fill", accessibilityDescription: "fridge")
+            let icon = NSImage(systemSymbolName: "refrigerator.fill", accessibilityDescription: "Fridge")
             let config = NSImage.SymbolConfiguration(pointSize: 13, weight: .black)
             let iconWithConfig = icon?.withSymbolConfiguration(config)
             Image(nsImage: iconWithConfig!)

@@ -19,14 +19,14 @@ struct FridgeMenu: View {
                 Spacer()
                 HStack{
                     if fridgeModel.ffiles.hasAvailableSlots {
-                        ScalingButton(systemName: "plus.circle", action: {inEditMode = false; fridgeModel.openDialog()} )
+                        IconButton(systemName: "plus.circle", action: {inEditMode = false; fridgeModel.openDialog()} )
                     }
                     if inEditMode {
-                        ScalingButton(systemName: "minus.circle.fill", isDynamic: false, action: {inEditMode.toggle()} )
+                        IconButton(systemName: "minus.circle.fill", isDynamic: false, action: {inEditMode.toggle()} )
                     } else {
-                        ScalingButton(systemName: "minus.circle", action: {inEditMode.toggle()} )
+                        IconButton(systemName: "minus.circle", action: {inEditMode.toggle()} )
                     }
-                    ScalingButton(systemName: "x.circle", action: {inEditMode = false; NSApplication.shared.terminate(nil)} )
+                    IconButton(systemName: "x.circle", action: {inEditMode = false; NSApplication.shared.terminate(nil)} )
                 }.padding([.leading, .trailing, .top])
             }
             Divider().padding([.leading, .trailing])
@@ -43,7 +43,7 @@ struct FridgeMenu: View {
                             HStack {
                                 if inEditMode {
                                     Spacer()
-                                    ScalingButton(systemName: "minus.circle",
+                                    IconButton(systemName: "minus.circle",
                                                   color: Color.red,
                                                   isDynamic: false,
                                                   action: {fridgeModel.removeFile(i)} ).padding(.trailing)
@@ -60,7 +60,7 @@ struct FridgeMenu: View {
 
 // MARK: Button definitions
 
-struct ScalingButton: View {
+struct IconButton: View {
     let action: () -> Void
     let foreground: Color
     let isDynamic: Bool
@@ -102,6 +102,7 @@ struct FileButton: View {
                                             .frame(maxWidth: .infinity, alignment: .leading) })
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }
+        .scaleEffect(self.hovering ? 1.015 : 1.0)
         .background(self.hovering ?
                 RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) :
                 RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
