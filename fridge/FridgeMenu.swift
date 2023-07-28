@@ -8,11 +8,12 @@
 import Foundation
 import SwiftUI
 
-struct FridgeMenu: View {
+struct FridgeMenu: View, Themeable {
     @StateObject private var fridgeModel = Fridge()
     @State private var menu = ["File", "File Group"]
     @State private var inEditMode = false
     @State private var isPopover = false
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     var body: some View {
         VStack(spacing: 5) {
@@ -20,11 +21,11 @@ struct FridgeMenu: View {
                 Text("Fridge")
                     .padding([.leading, .trailing, .top])
                     .font(.system(.body))
-                    .foregroundColor(.white)
+                    .foregroundColor(primaryColor)
                 Spacer()
                 HStack{
                     if fridgeModel.ffiles.hasAvailableSlots {
-                        IconButton(systemName: "plus.circle", action: { inEditMode = false; self.isPopover.toggle() })
+                        IconButton(systemName: "plus.circle", color: primaryColor, action: { inEditMode = false; self.isPopover.toggle() })
                             .popover(isPresented: self.$isPopover, arrowEdge: .bottom) {
                                 PopoverMenu(
                                     MenuButton(text: "Add File", action: {fridgeModel.openDialog()}),
@@ -32,11 +33,11 @@ struct FridgeMenu: View {
                             )}
                     }
                     if inEditMode {
-                        IconButton(systemName: "minus.circle.fill", isDynamic: false, action: {inEditMode.toggle()} )
+                        IconButton(systemName: "minus.circle.fill", color: primaryColor, isDynamic: false, action: {inEditMode.toggle()} )
                     } else {
-                        IconButton(systemName: "minus.circle", action: {inEditMode.toggle()} )
+                        IconButton(systemName: "minus.circle", color: primaryColor, action: {inEditMode.toggle()} )
                     }
-                    IconButton(systemName: "x.circle", action: {inEditMode = false; NSApplication.shared.terminate(nil)} )
+                    IconButton(systemName: "x.circle", color: primaryColor, action: {inEditMode = false; NSApplication.shared.terminate(nil)} )
                 }.padding([.leading, .trailing, .top])
             }
             Divider().padding([.leading, .trailing])
@@ -70,14 +71,15 @@ struct FridgeMenu: View {
 
 // MARK: Buttons and Popover Menu
 
-struct IconButton: View {
+struct IconButton: View, Themeable {
     let action: () -> Void
     let foreground: Color
     let isDynamic: Bool
     let systemName: String
     @State var hovering = false
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
-    init(systemName: String, color foreground: Color = Color.white, isDynamic: Bool = true, action: @escaping () -> Void) {
+    init(systemName: String, color foreground: Color, isDynamic: Bool = true, action: @escaping () -> Void) {
         self.action = action
         self.foreground = foreground
         self.isDynamic = isDynamic
@@ -96,11 +98,12 @@ struct IconButton: View {
     }
 }
 
-struct FileButton: View {
+struct FileButton: View, Themeable {
     let action: () -> Void
     let isDynamic: Bool
     let text: String
     @State var hovering = false
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     init(text: String, isDynamic: Bool = true, action: @escaping () -> Void) {
         self.action = action
@@ -113,21 +116,22 @@ struct FileButton: View {
                 .padding(.leading, 10)
                 .padding([.top, .bottom], 8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundStyle(self.hovering ? .white : .gray)
+                .foregroundStyle(self.hovering && isDynamic ? alternateColor : primaryColor)
         })
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }
         .scaleEffect(self.hovering && isDynamic ? 1.015 : 1.0)
         .background(self.hovering && isDynamic ?
-                    RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color.white.opacity(0.2)) :
+                    RoundedRectangle(cornerRadius: 5, style: .continuous).fill(highlightColor) :
                     RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color.clear))
     }
 }
 
-struct MenuButton: View {
+struct MenuButton: View, Themeable {
     let action: () -> Void
     let text: String
     @State var hovering = false
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     init(text: String, action: @escaping () -> Void) {
         self.action = action
@@ -140,7 +144,7 @@ struct MenuButton: View {
                 .padding([.leading, .trailing], 5)
                 .padding([.top, .bottom], 3)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundStyle(self.hovering ? .white : .gray)
+                .foregroundStyle(self.hovering ? alternateColor : primaryColor)
         })
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }
@@ -149,17 +153,38 @@ struct MenuButton: View {
 }
 
 struct PopoverMenu: View {
-    @State private var firstOption: MenuButton
-    @State private var secondOption: MenuButton
+    let firstOption: MenuButton
+    let secondOption: MenuButton
     
     init(_ addFile: MenuButton, _ addFileGroup: MenuButton) {
-        self.firstOption = addFile
-        self.secondOption = addFileGroup
+        firstOption = addFile
+        secondOption = addFileGroup
     }
+    
     var body: some View {
         VStack(alignment: .center, spacing: 5) {
             firstOption
             secondOption
         }.padding(8)
+    }
+}
+
+// MARK: Behavior for light/dark mode
+
+protocol Themeable {
+    var colorScheme: ColorScheme { get }
+}
+
+extension Themeable {
+    var primaryColor: Color {
+        colorScheme == .dark ? .white : .black
+    }
+    
+    var alternateColor: Color {
+        colorScheme == .dark ? .black : .white
+    }
+    
+    var highlightColor: Color {
+        colorScheme == .light ? Color.black.opacity(0.2) : Color.white.opacity(0.2)
     }
 }
