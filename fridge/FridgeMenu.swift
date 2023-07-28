@@ -23,26 +23,23 @@ struct FridgeMenu: View, Themeable {
                 Text("Fridge")
                     .padding([.leading, .trailing, .top])
                     .font(.system(.body))
-                    .foregroundColor(titleColor)
+                    .foregroundColor(primaryColor)
                 Spacer()
                 HStack{
                     // MARK: Add File Button
                     if fridgeModel.ffiles.hasAvailableSlots {
-                        IconButton(systemName: "plus.circle", color: titleColor, action: { inEditMode = false; self.isPopover.toggle() })
+                        IconButton(systemName: "plus.circle", color: primaryColor, isDynamic: !isPopover, action: { inEditMode = false; self.isPopover.toggle() })
                         .popover(isPresented: self.$isPopover, arrowEdge: .bottom) {
                                 PopoverMenu(
-                                    MenuButton(text: "Add File", action: {fridgeModel.openDialog()}),
-                                    MenuButton(text: "Add File Group", action: {})
+                                    MenuButton(text: "Add File", action: { fridgeModel.openDialog() }),
+                                    MenuButton(text: "Add File Group", action: { })
                             )}
                     }
                     // MARK: Edit/Remove File Button
-                    if inEditMode {
-                        IconButton(systemName: "minus.circle", color: titleColor, isDynamic: false, action: {inEditMode.toggle()} )
-                    } else {
-                        IconButton(systemName: "minus.circle", color: titleColor, action: {inEditMode.toggle()} )
-                    }
+                    IconButton(systemName: "minus.circle", color: primaryColor, isDynamic: !inEditMode, action: { inEditMode.toggle() } )
+                    
                     // MARK: Quit Button
-                    IconButton(systemName: "x.circle", color: titleColor, action: {inEditMode = false; NSApplication.shared.terminate(nil)} )
+                    IconButton(systemName: "x.circle", color: primaryColor, action: { inEditMode = false; NSApplication.shared.terminate(nil) })
                 }.padding([.leading, .trailing, .top])
             }
             
@@ -53,15 +50,16 @@ struct FridgeMenu: View, Themeable {
                 VStack(spacing: 5) {
                     ForEach(0..<fridgeModel.ffiles.count, id: \.self) { i in
                         ZStack {
+                            let filename = fridgeModel.ffiles[i].filename
                             if inEditMode || isPopover {
-                                FileButton(text: fridgeModel.ffiles[i].filename, isDynamic: false, action: {} )
+                                FileButton(text: filename, isDynamic: false, action: {} )
                             } else {
-                                FileButton(text: fridgeModel.ffiles[i].filename, action: {fridgeModel.openFile(i)} )
+                                FileButton(text: filename, action: { fridgeModel.openFile(i) })
                             }
                             HStack {
                                 if inEditMode {
                                     Spacer()
-                                    IconButton(systemName: "minus.circle", color: Color.red, isDynamic: false, action: {fridgeModel.removeFile(i)} ).padding(.trailing)
+                                    IconButton(systemName: "minus.circle", color: Color.red, isDynamic: false, action: { fridgeModel.removeFile(i) }).padding(.trailing)
                                 }
                             }
                         }.padding([.leading, .trailing], 8)
