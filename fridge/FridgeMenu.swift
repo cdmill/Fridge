@@ -113,13 +113,14 @@ struct FileButton: View {
                 .padding(.leading, 10)
                 .padding([.top, .bottom], 8)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundStyle(self.hovering ? .white : .gray)
         })
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }
         .scaleEffect(self.hovering && isDynamic ? 1.015 : 1.0)
         .background(self.hovering && isDynamic ?
-                    RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.white.opacity(0.2)) :
-                    RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color.clear))
+                    RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color.white.opacity(0.2)) :
+                    RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color.clear))
     }
 }
 
@@ -143,6 +144,7 @@ struct MenuButton: View {
         })
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }
+        .scaleEffect(self.hovering ? 1.015 : 1.0)
     }
 }
 
