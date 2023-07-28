@@ -11,6 +11,7 @@ Simple, lightweight, quick-access file launcher for the macOS menubar.
 ---
 
 Store file URLs that you'll need later so that you can quickly open them from the menu bar.
+
 I started this project because I found myself reading or needing to frequently reference files and I was tired of navigating Finder or storing the files on the desktop.
 
 As of version `1.1` a maximum of 4 file slots are available.
