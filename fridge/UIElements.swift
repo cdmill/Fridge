@@ -13,20 +13,16 @@ protocol Themeable {
 }
 
 extension Themeable {
-    var titleColor: Color {
+    var primaryColor: Color {
         colorScheme == .dark ? .white : .black
     }
     
-    var primaryColor: Color {
-        colorScheme == .dark ? .white.opacity(0.65) : .black
+    var buttonTextColor: Color {
+        colorScheme == .dark ? .white.opacity(0.65) : .black.opacity(0.65)
     }
     
-    var hoverTextColor: Color {
-        Color.white
-    }
-    
-    var hoverButtonColor: Color {
-        colorScheme == .dark ? Color.white.opacity(0.2) : Color.black.opacity(0.2)
+    var buttonHoverColor: Color {
+        colorScheme == .dark ? Color.white.opacity(0.2) : Color.black.opacity(0.15)
     }
 }
 
@@ -77,13 +73,13 @@ struct FileButton: View, Themeable {
                 .padding(.leading, 10)
                 .padding([.top, .bottom], 8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundStyle(self.hovering && isDynamic ? hoverTextColor : primaryColor)
+                .foregroundStyle(self.hovering && isDynamic ? primaryColor : buttonTextColor)
         })
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }
         .scaleEffect(self.hovering && isDynamic ? 1.015 : 1.0)
         .background(self.hovering && isDynamic ?
-                    RoundedRectangle(cornerRadius: 5, style: .continuous).fill(hoverButtonColor) :
+                    RoundedRectangle(cornerRadius: 5, style: .continuous).fill(buttonHoverColor) :
                     RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color.clear))
     }
 }
@@ -105,7 +101,7 @@ struct MenuButton: View, Themeable {
                 .padding([.leading, .trailing], 5)
                 .padding([.top, .bottom], 3)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundStyle(self.hovering ? hoverTextColor : primaryColor)
+                .foregroundStyle(self.hovering ? primaryColor : buttonTextColor)
         })
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }
