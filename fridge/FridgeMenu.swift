@@ -48,20 +48,14 @@ struct FridgeMenu: View, Themeable {
             if !fridgeModel.ffiles.isEmpty {
                 VStack(spacing: 5) {
                     ForEach(0..<fridgeModel.ffiles.count, id: \.self) { i in
-                        ZStack {
-                            let filename = fridgeModel.ffiles[i].filename
-                            if inEditMode || isPopover {
-                                FileButton(text: filename, isDynamic: false, action: {} )
-                            } else {
-                                FileButton(text: filename, action: { fridgeModel.openFile(i) })
+                        HStack {
+                            if inEditMode {
+                                IconButton(systemName: "minus.circle", color: Color.red, isDynamic: false, action: { fridgeModel.removeFile(i) }).padding(.leading)
                             }
-                            HStack {
-                                if inEditMode {
-                                    Spacer()
-                                    IconButton(systemName: "minus.circle", color: Color.red, isDynamic: false, action: { fridgeModel.removeFile(i) }).padding(.trailing)
-                                }
-                            }
-                        }.padding([.leading, .trailing], 8)
+                            FileButton(text: fridgeModel.ffiles[i].filename, isDynamic: !inEditMode, action: { fridgeModel.openFile(i) })
+                                .padding([.leading, .trailing], inEditMode ? 0 : 8)
+                                .disabled(inEditMode || isPopover)
+                        }
                     }
                 }
             }
