@@ -12,7 +12,6 @@ struct FridgeMenu: View, Themeable {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @StateObject private var fridgeModel = Fridge()
-    @State private var menu = ["File", "File Group"]
     @State private var inEditMode = false
     @State private var isPopover = false
     
@@ -39,7 +38,7 @@ struct FridgeMenu: View, Themeable {
                     IconButton(systemName: "minus.circle", color: primaryColor, isDynamic: !inEditMode, action: { inEditMode.toggle() } )
                     
                     // MARK: Quit Button
-                    IconButton(systemName: "x.circle", color: primaryColor, action: { inEditMode = false; NSApplication.shared.terminate(nil) })
+                    IconButton(systemName: "x.circle", color: primaryColor, action: { NSApplication.shared.terminate(self) })
                 }.padding([.leading, .trailing, .top])
             }
             
