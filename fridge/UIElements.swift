@@ -110,18 +110,17 @@ struct MenuButton: View, Themeable {
 }
 
 struct PopoverMenu: View {
-    let firstOption: MenuButton
-    let secondOption: MenuButton
+    var menuItems: [MenuButton] = []
     
-    init(_ addFile: MenuButton, _ addFileGroup: MenuButton) {
-        firstOption = addFile
-        secondOption = addFileGroup
+    init(_ item: MenuButton...) {
+        self.menuItems.append(contentsOf: item)
     }
     
     var body: some View {
         VStack(alignment: .center, spacing: 5) {
-            firstOption
-            secondOption
+            ForEach(0..<menuItems.count, id: \.self) { i in
+                menuItems[i]
+            }
         }.padding(8)
     }
 }
