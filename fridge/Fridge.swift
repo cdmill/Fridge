@@ -60,8 +60,8 @@ extension FridgeMenu {
                 return
             }
             var filename = url.lastPathComponent
-            if filename.count > 25 {
-                filename = String(filename.dropLast(filename.count - 25))
+            if filename.count > 30 {
+                filename = String(filename.dropLast(filename.count - 30))
                 filename.append("...")
             }
             ffiles.addFridgeFile(FridgeFile(filename: filename, url: url, bookmark: bookmark))
