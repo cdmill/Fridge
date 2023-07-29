@@ -59,7 +59,12 @@ extension FridgeMenu {
             else {
                 return
             }
-            ffiles.addFridgeFile(FridgeFile(filename: url.lastPathComponent, url: url, bookmark: bookmark))
+            var filename = url.lastPathComponent
+            if filename.count > 25 {
+                filename = String(filename.dropLast(filename.count - 25))
+                filename.append("...")
+            }
+            ffiles.addFridgeFile(FridgeFile(filename: filename, url: url, bookmark: bookmark))
             ffiles.sort(by: { $0.filename.lowercased() < $1.filename.lowercased()} )
             bookmarks[url] = bookmark.bookmarkData
             encode()
