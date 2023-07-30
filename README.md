@@ -9,7 +9,7 @@
 Simple, lightweight, quick-access file launcher for the macOS menubar.
 
 <p align="left">
-<img src="https://github.com/cdmill/Fridge/assets/115658917/c5b01af8-9d58-403a-bd38-d3314d1dfbfb" width="500" height="400">
+<img src="https://github.com/cdmill/fridge-demo/blob/main/demo.gif" width="75%" height="60%">
 </p>
 
 ---
