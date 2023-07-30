@@ -21,7 +21,7 @@ struct FridgeMenu: View, Themeable {
             HStack{
                 Text("Fridge")
                     .padding([.leading, .trailing, .top])
-                    .font(.system(.body))
+                    .font(.system(.body).bold())
                     .foregroundColor(primaryColor)
                 Spacer()
                 HStack{
