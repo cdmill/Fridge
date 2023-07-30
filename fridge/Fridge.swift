@@ -38,7 +38,9 @@ extension FridgeMenu {
             dialog.canResolveUbiquitousConflicts = false
             dialog.canDownloadUbiquitousContents = true
             dialog.orderFrontRegardless()
-            dialog.allowedContentTypes = [.pdf, .plainText, .text]
+            dialog.allowedContentTypes = [.pdf, .plainText, .text,
+                                          .application, .executable,
+                                          .script, .image]
             
             guard
                 dialog.runModal() == NSApplication.ModalResponse.OK,
@@ -59,11 +61,7 @@ extension FridgeMenu {
             else {
                 return
             }
-            var filename = url.lastPathComponent
-            if filename.count > 30 {
-                filename = String(filename.dropLast(filename.count - 30))
-                filename.append("...")
-            }
+            let filename = getFilename(from: url)
             ffiles.addFridgeFile(FridgeFile(filename: filename, url: url, bookmark: bookmark))
             ffiles.sort(by: { $0.filename.lowercased() < $1.filename.lowercased()} )
             bookmarks[url] = bookmark.bookmarkData
@@ -90,6 +88,18 @@ extension FridgeMenu {
             if let encoded = try? JSONEncoder().encode(bookmarks) {
                 UserDefaults.standard.set(encoded, forKey: KEY)
             }
+        }
+        
+        private func getFilename(from url: URL) -> String {
+            var filename = url.lastPathComponent
+            if filename.hasSuffix(".app") {
+                filename.removeLast(4)
+            }
+            if filename.count > 28 {
+                filename = String(filename.dropLast(filename.count - 28))
+                filename.append("...")
+            }
+            return filename
         }
     }
 }

@@ -31,7 +31,7 @@ struct FridgeMenu: View, Themeable {
                         .popover(isPresented: self.$isPopover, arrowEdge: .bottom) {
                                 PopoverMenu(
                                     MenuButton(text: "Add File", action: { fridgeModel.openDialog() }),
-                                    MenuButton(text: "Add File Group", action: { })
+                                    MenuButton(text: "Add Group", action: { })
                             )}
                     }
                     // MARK: Edit/Remove File Button
@@ -50,7 +50,7 @@ struct FridgeMenu: View, Themeable {
                     ForEach(0..<fridgeModel.ffiles.count, id: \.self) { i in
                         HStack {
                             if inEditMode {
-                                IconButton(systemName: "minus.circle", color: Color.red, isDynamic: false, action: { fridgeModel.removeFile(i) }).padding(.leading)
+                                IconButton(systemName: "minus.circle", color: Color.red, action: { fridgeModel.removeFile(i) }).padding(.leading)
                             }
                             FileButton(text: fridgeModel.ffiles[i].filename, isDynamic: !inEditMode, action: { fridgeModel.openFile(i) })
                                 .padding([.leading, .trailing], inEditMode ? 0 : 8)

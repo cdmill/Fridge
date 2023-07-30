@@ -17,11 +17,11 @@ extension Themeable {
         colorScheme == .dark ? .white : .black
     }
     
-    var buttonTextColor: Color {
+    var buttonTextHoverColor: Color {
         colorScheme == .dark ? .white.opacity(0.65) : .black.opacity(0.65)
     }
     
-    var buttonHoverColor: Color {
+    var buttonBackgroundHoverColor: Color {
         colorScheme == .dark ? Color.white.opacity(0.2) : Color.black.opacity(0.15)
     }
 }
@@ -33,6 +33,7 @@ struct IconButton: View, Themeable {
     let foreground: Color
     let isDynamic: Bool
     let systemName: String
+    var unfocusedOpacity: Double { foreground == primaryColor ? 0.5 : 0.8 }
     @State var hovering = false
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
@@ -46,7 +47,7 @@ struct IconButton: View, Themeable {
     var body: some View {
         Button(action: action,
                label: { Image(systemName: systemName)
-                .opacity((self.hovering && isDynamic) || (!isDynamic) ? 1.0 : 0.5)
+                .opacity((self.hovering && isDynamic) || (!isDynamic) ? 1.0 : unfocusedOpacity)
                 .foregroundColor(foreground)
         })
         .buttonStyle(.borderless)
@@ -73,13 +74,13 @@ struct FileButton: View, Themeable {
                 .padding(.leading, 10)
                 .padding([.top, .bottom], 8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundStyle(self.hovering && isDynamic ? primaryColor : buttonTextColor)
+                .foregroundStyle(self.hovering && isDynamic ? primaryColor : buttonTextHoverColor)
         })
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }
         .scaleEffect(self.hovering && isDynamic ? 1.015 : 1.0)
         .background(self.hovering && isDynamic ?
-                    RoundedRectangle(cornerRadius: 5, style: .continuous).fill(buttonHoverColor) :
+                    RoundedRectangle(cornerRadius: 5, style: .continuous).fill(buttonBackgroundHoverColor) :
                     RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color.clear))
     }
 }
@@ -100,8 +101,8 @@ struct MenuButton: View, Themeable {
                 .font(.callout)
                 .padding([.leading, .trailing], 5)
                 .padding([.top, .bottom], 3)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundStyle(self.hovering ? primaryColor : buttonTextColor)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .foregroundStyle(self.hovering ? primaryColor : buttonTextHoverColor)
         })
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }
