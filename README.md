@@ -20,7 +20,7 @@ A future feature will be _file groups_, which will allow for some organization.
 
 ## Downloading FRIDGE
 
-Direct downloads can be found on the [releases](https://github.com/cdmill/fridge/releases/tag/v1.1) page.
+Direct downloads can be found on the [releases](https://github.com/cdmill/fridge/releases/tag/v1.2) page.
 
 After downloading and unzipping, drag the `.app` file to your Applications folder.
 
