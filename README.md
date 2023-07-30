@@ -1,4 +1,4 @@
-# FRIDGE
+# Fridge
 
 <p align="left">
     <img src="https://img.shields.io/github/v/tag/cdmill/fridge" />
@@ -10,17 +10,12 @@ Simple, lightweight, quick-access file launcher for the macOS menubar.
 
 ---
 
-Store file URLs that you'll need later so that you can quickly open them from the menu bar.
-
-I started this project because I found myself reading or needing to frequently reference files and I was tired of navigating Finder or storing the files on the desktop.
-
-As of version `1.1` a maximum of 4 file slots are available.
-This is enforced to keep the workflow focused, 
-but a possible future feature could be _file groups_ which would provide more file slots while providing some form of organization.
+As of version `1.1` a maximum of 4 file slots are available to keep the workflow focused.
+A future feature will be _file groups_, which will allow for some organization.
 
 ## Downloading FRIDGE
 
-Direct downloads can be found on the [releases](https://github.com/cdmill/fridge/releases/tag/v1.0) page.
+Direct downloads can be found on the [releases](https://github.com/cdmill/fridge/releases/tag/v1.1) page.
 
 After downloading and unzipping, drag the `.app` file to your Applications folder.
 
