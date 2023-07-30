@@ -8,9 +8,14 @@
 
 Simple, lightweight, quick-access file launcher for the macOS menubar.
 
+<p align="left">
+<img src="https://github.com/cdmill/Fridge/assets/115658917/c5b01af8-9d58-403a-bd38-d3314d1dfbfb" width="500" height="400">
+</p>
+
 ---
 
 As of version `1.1` a maximum of 4 file slots are available to keep the workflow focused.
+
 A future feature will be _file groups_, which will allow for some organization.
 
 ## Downloading FRIDGE
