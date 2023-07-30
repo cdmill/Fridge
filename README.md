@@ -18,7 +18,7 @@ As of version `1.1` a maximum of 4 file slots are available to keep the workflow
 
 A future feature will be _file groups_, which will allow for some organization.
 
-## Downloading FRIDGE
+## Download
 
 Direct downloads can be found on the [releases](https://github.com/cdmill/fridge/releases/tag/v1.2) page.
 
