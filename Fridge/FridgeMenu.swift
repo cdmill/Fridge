@@ -11,7 +11,7 @@ import SwiftUI
 struct FridgeMenu: View, Themeable {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
-    @StateObject private var fridgeModel = Fridge()
+    @StateObject private var model = Fridge()
     @State private var inEditMode = false
     @State private var isPopover = false
     
@@ -26,11 +26,11 @@ struct FridgeMenu: View, Themeable {
                 Spacer()
                 HStack{
                     // MARK: Add File Button
-                    if fridgeModel.ffiles.hasAvailableSlots {
+                    if model.ffiles.hasAvailableSlots {
                         IconButton(systemName: "plus.circle", color: primaryColor, isDynamic: !isPopover, action: { inEditMode = false; self.isPopover.toggle() })
                         .popover(isPresented: self.$isPopover, arrowEdge: .bottom) {
                                 PopoverMenu(
-                                    MenuButton(text: "Add File", action: { fridgeModel.openDialog() }),
+                                    MenuButton(text: "Add File", action: { model.openDialog() }),
                                     MenuButton(text: "Add Group", action: { })
                             )}
                     }
@@ -45,14 +45,14 @@ struct FridgeMenu: View, Themeable {
             Divider().padding([.leading, .trailing])
             
             // MARK: File Buttons
-            if !fridgeModel.ffiles.isEmpty {
+            if !model.ffiles.isEmpty {
                 VStack(spacing: 5) {
-                    ForEach(0..<fridgeModel.ffiles.count, id: \.self) { i in
+                    ForEach(0..<model.ffiles.count, id: \.self) { i in
                         HStack {
                             if inEditMode {
-                                IconButton(systemName: "minus.circle", color: Color.red, action: { fridgeModel.removeFile(i) }).padding(.leading)
+                                IconButton(systemName: "minus.circle", color: Color.red, action: { model.removeFile(i) }).padding(.leading)
                             }
-                            FileButton(text: fridgeModel.ffiles[i].filename, isDynamic: !inEditMode, action: { fridgeModel.openFile(i) })
+                            FileButton(text: model.ffiles[i].filename, isDynamic: !inEditMode, action: { model.openFile(i) })
                                 .padding([.leading, .trailing], inEditMode ? 0 : 8)
                                 .disabled(inEditMode || isPopover)
                         }
