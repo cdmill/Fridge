@@ -20,27 +20,24 @@ struct FridgeMenu: View, Themeable {
             // MARK: Title Bar
             HStack{
                 Text("Fridge")
-                    .padding([.leading, .trailing, .top])
                     .font(.system(.body).bold())
                     .foregroundColor(primaryColor)
                 Spacer()
-                HStack{
-                    // MARK: Add File Button
+                if inEditMode {
+                // MARK: Add File Button
                     if model.ffiles.hasAvailableSlots {
-                        IconButton(systemName: "plus.circle", color: primaryColor, isDynamic: !isPopover, action: { inEditMode = false; self.isPopover.toggle() })
-                        .popover(isPresented: self.$isPopover, arrowEdge: .bottom) {
+                        IconButton(systemName: "plus", color: primaryColor, isDynamic: !isPopover, fontWeight: .title3, action: { self.isPopover.toggle() })
+                            .popover(isPresented: self.$isPopover, arrowEdge: .bottom) {
                                 PopoverMenu(
                                     MenuButton(text: "Add File", action: { model.openDialog() }),
                                     MenuButton(text: "Add Group", action: { })
-                            )}
+                                )}
                     }
-                    // MARK: Edit/Remove File Button
-                    IconButton(systemName: "minus.circle", color: primaryColor, isDynamic: !inEditMode, action: { inEditMode.toggle() } )
-                    
-                    // MARK: Quit Button
-                    IconButton(systemName: "x.circle", color: primaryColor, action: { NSApplication.shared.terminate(self) })
-                }.padding([.leading, .trailing, .top])
-            }
+                }
+                // MARK: Edit Button
+                IconButton(systemName: "slider.horizontal.3", color: primaryColor, isDynamic: !inEditMode, fontWeight: .title3, action: { inEditMode.toggle() } )
+                
+            }.padding([.leading, .trailing, .top])
             
             Divider().padding(.horizontal)
             
