@@ -24,7 +24,7 @@ struct FileButton: View, Themeable {
     var body: some View {
         Button(action: action, label: { Text(text)
                 .padding(.leading, 10)
-                .padding([.top, .bottom], 8)
+                .padding(.vertical, 8)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(self.hovering && isDynamic ? primaryColor : buttonTextHoverColor)
         })

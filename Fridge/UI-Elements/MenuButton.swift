@@ -22,8 +22,8 @@ struct MenuButton: View, Themeable {
     var body: some View {
         Button(action: action, label: { Text(text)
                 .font(.callout)
-                .padding([.leading, .trailing], 5)
-                .padding([.top, .bottom], 3)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 3)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .foregroundStyle(self.hovering ? primaryColor : buttonTextHoverColor)
         })

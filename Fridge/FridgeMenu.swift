@@ -1,6 +1,6 @@
 //
 //  FridgeMenu.swift
-//  fridge
+//  Fridge
 //
 //  Created by Casey Miller on 2023-07-20.
 //
@@ -42,7 +42,7 @@ struct FridgeMenu: View, Themeable {
                 }.padding([.leading, .trailing, .top])
             }
             
-            Divider().padding([.leading, .trailing])
+            Divider().padding(.horizontal)
             
             // MARK: File Buttons
             if !model.ffiles.isEmpty {
@@ -53,7 +53,7 @@ struct FridgeMenu: View, Themeable {
                                 IconButton(systemName: "minus.circle", color: Color.red, action: { model.removeFile(i) }).padding(.leading)
                             }
                             FileButton(text: model.ffiles[i].filename, isDynamic: !inEditMode, action: { model.openFile(i) })
-                                .padding([.leading, .trailing], inEditMode ? 0 : 8)
+                                .padding(.horizontal, inEditMode ? 0 : 8)
                                 .disabled(inEditMode || isPopover)
                         }
                     }

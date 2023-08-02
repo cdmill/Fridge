@@ -1,6 +1,6 @@
 //
 //  FridgeApp.swift
-//  fridge
+//  Fridge
 //
 //  Created by Casey Miller on 2023-07-18.
 //
