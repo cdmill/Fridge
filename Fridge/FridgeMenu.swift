@@ -20,25 +20,24 @@ struct FridgeMenu: View, Themeable {
             // MARK: Title Bar
             HStack{
                 Text("Fridge")
-                    .font(.system(.body).bold())
+                    .font(.system(.body))
                     .foregroundColor(primaryColor)
+                
                 Spacer()
-//                if inEditMode {
-//                    MenuButton(text: "Done", action: { self.inEditMode.toggle() })
-//                }
+                
                 // MARK: Edit Button
                 IconButton(systemName: "ellipsis.circle", color: primaryColor, isDynamic: !inEditMode, action: { self.inEditMode = false; self.isPopover.toggle() })
                             .popover(isPresented: self.$isPopover, arrowEdge: .bottom) {
                                 PopoverMenu(
-                                    MenuButton(text: "Add File", systemName: "plus.circle.fill", action: { model.openDialog() }),
+                                    MenuButton(text: "Add File", systemName: "doc.fill.badge.plus", action: { model.openDialog() }),
                                     MenuButton(text: "Add Group", systemName: "folder.fill.badge.plus", action: { }),
-                                    MenuButton(text: "Remove File", systemName: "minus.circle.fill", action: { self.inEditMode.toggle(); self.isPopover.toggle() })
+                                    MenuButton(text: "Edit", systemName: "minus.circle.fill", action: { self.inEditMode.toggle(); self.isPopover.toggle() }),
+                                    MenuButton(text: "Quit", systemName: "x.circle.fill", action: { NSApplication.shared.terminate(self) })
                                 )}
                     
                 IconButton(systemName: "gearshape", color: primaryColor, action: {} )
-//                IconButton(systemName: "x.circle.fill", color: primaryColor, fontWeight: .title3, action: { NSApplication.shared.terminate(self) })
                 
-            }.padding([.leading, .trailing, .top])
+            }.padding([.horizontal, .top])
             
             Divider().padding(.horizontal)
             
@@ -57,9 +56,6 @@ struct FridgeMenu: View, Themeable {
                     }
                 }
             }
-            
-            Divider().padding(.horizontal)
-            FileButton(text: "Quit", action: { NSApplication.shared.terminate(self) }).padding(.horizontal, 8)
             
         }.padding(.bottom, 8) // bottom of VStack
     }
