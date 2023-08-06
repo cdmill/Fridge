@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct FridgeMenu: View, Themeable {
+struct FridgeWindow: View, Themeable {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @StateObject private var model = Fridge()
