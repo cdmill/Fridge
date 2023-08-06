@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-@MainActor final class Fridge: ObservableObject {
+@MainActor final class FridgeModel: ObservableObject {
     
     @Published var ffiles: [FridgeFile] = []
     private var bookmarks = [URL: Data]()

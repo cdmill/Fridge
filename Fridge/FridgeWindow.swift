@@ -11,7 +11,7 @@ import SwiftUI
 struct FridgeWindow: View, Themeable {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
-    @StateObject private var model = Fridge()
+    @StateObject private var model = FridgeModel()
     @State private var inEditMode = false
     @State private var isPopover = false
     
