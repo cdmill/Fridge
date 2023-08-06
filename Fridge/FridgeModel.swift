@@ -8,22 +8,22 @@
 import Foundation
 import SwiftUI
 
-@MainActor final class FridgeModel: ObservableObject {
+final class FridgeModel: ObservableObject {
     
     @Published var ffiles: [FridgeFile] = []
     private var bookmarks = [URL: Data]()
     private let KEY = "stored-bookmarks"
     
     init() {
-        /// decode and rebuild possible saved bookmarks
+        /// decode and rebuild saved bookmarks, if any
         guard
-            let data = UserDefaults.standard.data(forKey: KEY),
-            let bookmarks = try? JSONDecoder().decode([URL: Data].self, from: data)
+            let storedBookmarks = UserDefaults.standard.data(forKey: KEY),
+            let bookmarks = try? JSONDecoder().decode([URL: Data].self, from: storedBookmarks)
         else {
             return
         }
-        for (url, data) in bookmarks {
-            addFile(url, from: data)
+        for (url, bookmarkData) in bookmarks {
+            addFile(url: url, from: bookmarkData)
         }
     }
     
@@ -48,14 +48,14 @@ import SwiftUI
             return
         }
         if !bookmarks.keys.contains(url) {
-            addFile(url)
+            addFile(url: url)
         }
     }
     
-    func addFile(_ url: URL, from data: Data? = nil) {
+    func addFile(url: URL, from data: Data? = nil) {
         guard let bookmark = (data == nil) ?
                 try? Bookmark(targetFileURL: url) :
-                    try? Bookmark(bookmarkData: data!)
+                try? Bookmark(bookmarkData: data!)
         else {
             return
         }
@@ -104,21 +104,5 @@ import SwiftUI
             filename.append("...")
         }
         return filename
-    }
-}
-
-extension Array where Element == FridgeFile {
-    
-    var hasAvailableSlots: Bool {
-        get {
-            self.count != 4
-        }
-    }
-    
-    mutating func addFridgeFile(_ ffile: FridgeFile) {
-        /// limit number of FridgeFiles in Fridge
-        if self.count < 4 {
-            self.append(ffile)
-        }
     }
 }

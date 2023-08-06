@@ -21,3 +21,19 @@ struct FridgeFile: Codable, Comparable {
         return lhs.filename == rhs.filename
     }
 }
+
+extension Array where Element == FridgeFile {
+    
+    var hasAvailableSlots: Bool {
+        get {
+            self.count != 4
+        }
+    }
+    
+    mutating func addFridgeFile(_ ffile: FridgeFile) {
+        /// limit number of FridgeFiles in Fridge
+        if self.count < 4 {
+            self.append(ffile)
+        }
+    }
+}
