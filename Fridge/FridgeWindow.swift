@@ -12,7 +12,7 @@ struct FridgeWindow: View, Themeable {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @StateObject private var model = FridgeModel()
-    @State private var inEditMode = false
+    @State private var expandTitleBarButtons = false
     @State private var isPopover = false
     
     var body: some View {
@@ -25,18 +25,14 @@ struct FridgeWindow: View, Themeable {
                 
                 Spacer()
                 
-//                // MARK: Edit Button
-//                IconButton(systemName: "ellipsis.circle", color: primaryColor, isDynamic: !inEditMode, action: { self.inEditMode = false; self.isPopover.toggle() })
-//                            .popover(isPresented: self.$isPopover, arrowEdge: .bottom) {
-//                                PopoverMenu(
-//                                    MenuButton(text: "Add File", systemName: "doc.fill.badge.plus", action: { model.openDialog() }),
-//                                    MenuButton(text: "Add Group", systemName: "folder.fill.badge.plus", action: { }),
-//                                    MenuButton(text: "Quit", systemName: "x.circle.fill", action: { NSApplication.shared.terminate(self) })
-//                                )}
-                    
-                IconButton(systemName: "doc.fill.badge.plus", color: primaryColor, action: { model.openDialog() })
-                IconButton(systemName: "folder.fill.badge.plus", color: primaryColor, action: {})
-                IconButton(systemName: "gearshape", color: primaryColor, action: {} )
+                if expandTitleBarButtons {
+                    IconButton(systemName: "doc.fill", action: { model.openDialog() })
+                    IconButton(systemName: "folder.fill", action: {})
+                    IconButton(systemName: "gear", action: {} ).contextMenu(ContextMenu(menuItems: {
+                        Button(action: { NSApplication.shared.terminate(self) }, label: { Text("Quit") })
+                    }))
+                }
+                IconButton(systemName: "ellipsis.circle", isDynamic: !expandTitleBarButtons, action: { expandTitleBarButtons.toggle() })
                 
             }.padding([.horizontal, .top])
             
@@ -47,9 +43,8 @@ struct FridgeWindow: View, Themeable {
                 VStack(spacing: 5) {
                     ForEach(0..<model.ffiles.count, id: \.self) { i in
                         HStack {
-                            FileButton(text: model.ffiles[i].filename, isDynamic: !inEditMode, action: { model.openFile(i) })
-                                .padding(.horizontal, inEditMode ? 0 : 8)
-                                .disabled(inEditMode || isPopover)
+                            FileButton(text: model.ffiles[i].filename, action: { model.openFile(i) })
+                                .padding(.horizontal, 8)
                                 .contextMenu(ContextMenu(menuItems: {
                                     Button(action: { model.removeFile(i) }, label: {Text("Remove file") })
                                 }))
