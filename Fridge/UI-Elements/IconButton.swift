@@ -26,7 +26,7 @@ struct IconButton: View, Themeable {
                label: { Image(systemName: systemName).font(.headline)
                 .opacity((self.hovering && isDynamic) || (!isDynamic) ? 1.0 : 0.5)
                 .foregroundColor(primaryColor)
-                .font(.callout)
+//                .font(.callout)
         })
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }

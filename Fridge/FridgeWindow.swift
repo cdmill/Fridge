@@ -12,8 +12,6 @@ struct FridgeWindow: View, Themeable {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @StateObject private var model = FridgeModel()
-    @State private var expandTitleBarButtons = false
-    @State private var isPopover = false
     
     var body: some View {
         VStack(spacing: 5) {
@@ -25,17 +23,11 @@ struct FridgeWindow: View, Themeable {
                 
                 Spacer()
                 
-                if expandTitleBarButtons {
-                    IconButton(systemName: "doc.fill", action: { model.openDialog() })
-                    IconButton(systemName: "folder.fill", action: {})
-                    IconButton(systemName: "gear", action: {} ).contextMenu(ContextMenu(menuItems: {
-                        Button(action: { NSApplication.shared.terminate(self) }, label: { Text("Quit") })
-                    }))
-                }
-                IconButton(systemName: "ellipsis.circle", isDynamic: !expandTitleBarButtons, action: { expandTitleBarButtons.toggle() })
-                
+                IconButton(systemName: "plus", action: { model.openDialog() }).fontWeight(.black)
+                IconButton(systemName: "folder.fill", action: {})
             }.padding([.horizontal, .top])
             
+                
             Divider().padding(.horizontal)
             
             // MARK: File Buttons
