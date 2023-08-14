@@ -24,7 +24,9 @@ struct FridgeWindow: View, Themeable {
                 Spacer()
                 
                 IconButton(systemName: "plus", action: { model.openDialog() }).fontWeight(.black)
-                IconButton(systemName: "folder.fill", action: {})
+                
+                // *Groups* for future release:
+                //                IconButton(systemName: "folder.fill", action: {})
             }.padding([.horizontal, .top])
             
                 
@@ -32,14 +34,16 @@ struct FridgeWindow: View, Themeable {
             
             // MARK: File Buttons
             if !model.ffiles.isEmpty {
-                VStack(spacing: 5) {
+                LazyVStack(spacing: 5) {
                     ForEach(0..<model.ffiles.count, id: \.self) { i in
                         HStack {
                             FileButton(text: model.ffiles[i].filename, action: { model.openFile(i) })
                                 .padding(.horizontal, 8)
+                                .onDrag { NSItemProvider(object: model.ffiles[i].url as NSURL )}
                                 .contextMenu(ContextMenu(menuItems: {
                                     Button(action: { model.removeFile(i) }, label: {Text("Remove file") })
                                 }))
+                            
                         }
                     }
                 }
