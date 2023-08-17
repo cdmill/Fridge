@@ -29,8 +29,7 @@ struct FileButton: View, Themeable {
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }
         .scaleEffect(self.hovering ? 1.015 : 1.0)
-        .background(self.hovering ?
-                    RoundedRectangle(cornerRadius: 5, style: .continuous).fill(buttonBackgroundHoverColor) :
-                    RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color.clear))
+        .background(
+            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(self.hovering ? buttonBackgroundHoverColor : Color.clear))
     }
 }

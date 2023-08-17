@@ -22,14 +22,15 @@ struct IconButton: View, Themeable {
     }
     
     var body: some View {
-        Button(action: action,
-               label: { Image(systemName: systemName).font(.headline)
+        Button(action: action, label: { Image(systemName: systemName).font(.headline)
                 .opacity((self.hovering && isDynamic) || (!isDynamic) ? 1.0 : 0.5)
                 .foregroundColor(primaryColor)
-//                .font(.callout)
+                .frame(width: 20, height: 20, alignment: .center)
+                .padding(2)
         })
         .buttonStyle(.borderless)
         .onHover{ hover in hovering = hover }
-        .scaleEffect(self.hovering ? 1.075 : 1.0)
+        .background(
+            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(self.hovering ? buttonBackgroundHoverColor : Color.clear))
     }
 }

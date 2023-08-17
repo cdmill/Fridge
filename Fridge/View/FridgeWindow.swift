@@ -10,7 +10,6 @@ import SwiftUI
 
 struct FridgeWindow: View, Themeable {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    
     @StateObject private var model = FridgeModel()
     
     var body: some View {
@@ -23,13 +22,13 @@ struct FridgeWindow: View, Themeable {
                 
                 Spacer()
                 
-                IconButton(systemName: "plus", action: { model.openDialog() }).fontWeight(.black)
-                
+                IconButton(systemName: "plus", action: { model.openDialog() })
                 // *Groups* for future release:
+                //                IconButton(systemName: "ellipsis", action: { model.openDialog() })
                 //                IconButton(systemName: "folder.fill", action: {})
             }.padding([.horizontal, .top])
             
-                
+            
             Divider().padding(.horizontal)
             
             // MARK: File Buttons
@@ -39,11 +38,9 @@ struct FridgeWindow: View, Themeable {
                         HStack {
                             FileButton(text: model.ffiles[i].filename, action: { model.openFile(i) })
                                 .padding(.horizontal, 8)
-                                .onDrag { NSItemProvider(object: model.ffiles[i].url as NSURL )}
                                 .contextMenu(ContextMenu(menuItems: {
                                     Button(action: { model.removeFile(i) }, label: {Text("Remove file") })
                                 }))
-                            
                         }
                     }
                 }
