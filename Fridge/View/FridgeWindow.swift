@@ -15,7 +15,7 @@ struct FridgeWindow: View, Themeable {
     var body: some View {
         VStack(spacing: 5) {
             // MARK: Title Bar
-            HStack{
+            HStack(spacing: 0) {
                 Text("Fridge")
                     .font(.system(.body))
                     .foregroundColor(primaryColor)
@@ -26,9 +26,7 @@ struct FridgeWindow: View, Themeable {
                     .contextMenu(ContextMenu(menuItems: {
                         Button(action: { NSApplication.shared.terminate(self) }, label: {Text("Quit") })
                     }))
-                // *Groups* for future release:
-                //                IconButton(systemName: "ellipsis", action: { model.openDialog() })
-                //                IconButton(systemName: "folder.fill", action: {})
+                IconButton(systemName: "folder.fill", action: {})
             }.padding([.horizontal, .top])
             
             
