@@ -23,6 +23,9 @@ struct FridgeWindow: View, Themeable {
                 Spacer()
                 
                 IconButton(systemName: "plus", action: { model.openDialog() })
+                    .contextMenu(ContextMenu(menuItems: {
+                        Button(action: { NSApplication.shared.terminate(self) }, label: {Text("Quit") })
+                    }))
                 // *Groups* for future release:
                 //                IconButton(systemName: "ellipsis", action: { model.openDialog() })
                 //                IconButton(systemName: "folder.fill", action: {})
