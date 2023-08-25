@@ -46,6 +46,7 @@ struct FridgeWindow: View, Themeable {
                     }
                 }
             }
+            GroupButton{Text("test")}
             
         }.padding(.bottom, 8) // bottom of VStack
     }
