@@ -11,6 +11,7 @@ import SwiftUI
 final class FridgeModel: ObservableObject {
     
     @Published var ffiles: [FridgeFile] = []
+    @Published var fgroups: [[FridgeFile]] = []
     private var bookmarks = [URL: Data]()
     private let KEY = "stored-bookmarks"
     
