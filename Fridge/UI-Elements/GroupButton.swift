@@ -20,7 +20,7 @@ struct GroupButton <Content: View>: View, Themeable {
         VStack {
             
             Button(action: {
-                withAnimation() {
+                withAnimation {
                     self.isExpanded.toggle()
                 }}, label: {
                     Text("Group Name")

@@ -9,12 +9,12 @@ import Foundation
 import SwiftUI
 
 final class FridgeModel: ObservableObject {
-    
+
     @Published var ffiles: [FridgeFile] = []
     @Published var fgroups: [[FridgeFile]] = []
     private var bookmarks = [URL: Data]()
     private let KEY = "stored-bookmarks"
-    
+
     init() {
         /// decode and rebuild saved bookmarks, if any
         guard
@@ -27,7 +27,7 @@ final class FridgeModel: ObservableObject {
             addFile(url: url, from: bookmarkData)
         }
     }
-    
+
     func openDialog() {
         let dialog = NSOpenPanel()
         dialog.center()
@@ -40,7 +40,7 @@ final class FridgeModel: ObservableObject {
         dialog.allowedContentTypes = [.pdf, .plainText, .text,
                                       .application, .executable,
                                       .script, .image]
-        
+
         guard
             dialog.runModal() == NSApplication.ModalResponse.OK,
             let url = dialog.url
@@ -52,27 +52,37 @@ final class FridgeModel: ObservableObject {
             addFile(url: url)
         }
     }
-    
-    func addFile(url: URL, from data: Data? = nil) {
-        guard let bookmark = (data == nil) ?
-                try? Bookmark(targetFileURL: url) :
-                try? Bookmark(bookmarkData: data!)
+
+    func addFile(url: URL) {
+        guard let bookmark = try? Bookmark(targetFileURL: url)
         else {
             return
         }
+        addFileHelper(url: url, bookmark: bookmark)
+    }
+
+    func addFile(url: URL, from data: Data) {
+        guard let bookmark = try? Bookmark(bookmarkData: data)
+        else {
+            return
+        }
+        addFileHelper(url: url, bookmark: bookmark)
+    }
+
+    private func addFileHelper(url: URL, bookmark: Bookmark) {
         let filename = getFilename(from: url)
         ffiles.addFridgeFile(FridgeFile(filename: filename, url: url, bookmark: bookmark))
         ffiles.sort(by: { $0 < $1 })
         bookmarks[url] = bookmark.bookmarkData
         encode()
     }
-    
+
     func removeFile(_ index: Int) {
         bookmarks.removeValue(forKey: ffiles[index].url)
         ffiles.remove(at: index)
         encode()
     }
-    
+
     func openFile(_ index: Int) {
         let bookmark = ffiles[index].bookmark
         let returnedState = try? bookmark.usingTargetURL { targetURL in
@@ -88,13 +98,13 @@ final class FridgeModel: ObservableObject {
             //      In message dialog, include buttons to readd file or to cancel
         }
     }
-    
+
     private func encode() {
         if let encoded = try? JSONEncoder().encode(bookmarks) {
             UserDefaults.standard.set(encoded, forKey: KEY)
         }
     }
-    
+
     private func getFilename(from url: URL) -> String {
         var filename = url.lastPathComponent
         if filename.hasSuffix(".app") {

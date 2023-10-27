@@ -26,7 +26,6 @@ struct FridgeWindow: View, Themeable {
                     .contextMenu(ContextMenu(menuItems: {
                         Button(action: { NSApplication.shared.terminate(self) }, label: {Text("Quit") })
                     }))
-                IconButton(systemName: "folder.fill", action: {})
             }.padding([.horizontal, .top])
             
             
@@ -34,7 +33,7 @@ struct FridgeWindow: View, Themeable {
             
             // MARK: File Buttons
             if !model.ffiles.isEmpty {
-                LazyVStack(spacing: 5) {
+                VStack(spacing: 5) {
                     ForEach(0..<model.ffiles.count, id: \.self) { i in
                         HStack {
                             FileButton(text: model.ffiles[i].filename, action: { model.openFile(i) })
@@ -46,7 +45,6 @@ struct FridgeWindow: View, Themeable {
                     }
                 }
             }
-            GroupButton{Text("test")}
             
         }.padding(.bottom, 8) // bottom of VStack
     }
